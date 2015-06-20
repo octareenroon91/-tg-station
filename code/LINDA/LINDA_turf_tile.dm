@@ -242,6 +242,8 @@ turf/simulated/proc/share_temperature_mutual_solid(turf/simulated/sharer, conduc
 			overlays.Add(SSair.plasma_overlay)
 		if("sleeping_agent")
 			overlays.Add(SSair.sleeptoxin_overlay)
+		if("volatile_fuel")
+			overlays.Add(SSair.volatile_overlay)
 
 /turf/simulated/proc/share_air(var/turf/simulated/T)
 	if(T.current_cycle < current_cycle)

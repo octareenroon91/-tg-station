@@ -10,12 +10,18 @@
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 	var/datum/gas_mixture/air_contents = return_air()
+	var/datum/gas/sleeping_agent/oxidizer = locate(/datum/gas/sleeping_agent) in air_contents.trace_gases
+	var/datum/gas/volatile_fuel/fuel = locate(/datum/gas/volatile_fuel/) in air_contents.trace_gases
+	var/fuel_moles = fuel ? fuel.moles : 0
+	var/oxidizer_moles = oxidizer ? oxidizer.moles : 0
+	var/oxidants = air_contents.oxygen + oxidizer_moles
+	var/combustibles = air_contents.toxins + fuel_moles
 	if(!air_contents)
 		return 0
 
 	if(active_hotspot)
 		if(soh)
-			if(air_contents.toxins > 0.5 && air_contents.oxygen > 0.5)
+			if(combustibles > 0.5 && oxidants > 0.5)
 				if(active_hotspot.temperature < exposed_temperature)
 					active_hotspot.temperature = exposed_temperature
 				if(active_hotspot.volume < exposed_volume)
@@ -24,11 +30,11 @@
 
 	var/igniting = 0
 
-	if((exposed_temperature > PLASMA_MINIMUM_BURN_TEMPERATURE) && air_contents.toxins > 0.5)
+	if((exposed_temperature > PLASMA_MINIMUM_BURN_TEMPERATURE) && combustibles > 0.5)
 		igniting = 1
 
 	if(igniting)
-		if(air_contents.oxygen < 0.5 || air_contents.toxins < 0.5)
+		if(oxidants < 0.5 || combustibles < 0.5)
 			return 0
 
 		active_hotspot = PoolOrNew(/obj/effect/hotspot, src)
@@ -94,10 +100,6 @@
 
 
 /obj/effect/hotspot/process()
-	if(just_spawned)
-		just_spawned = 0
-		return 0
-
 	var/turf/simulated/location = loc
 	if(!istype(location))
 		Kill()
@@ -107,12 +109,25 @@
 
 	if(location.excited_group)
 		location.excited_group.reset_cooldowns()
+	if(!location.air)
+		return
+	var/datum/gas/sleeping_agent/oxidizer = locate(/datum/gas/sleeping_agent) in location.air.trace_gases
+	var/datum/gas/volatile_fuel/fuel = locate(/datum/gas/volatile_fuel/) in location.air.trace_gases
+	var/fuel_moles = fuel ? fuel.moles : 0
+	var/oxidizer_moles = oxidizer ? oxidizer.moles : 0
+	var/oxidants = location.air.oxygen + oxidizer_moles
+	var/combustibles = location.air.toxins + fuel_moles
+	if(just_spawned)
+		just_spawned = 0
+		return 0
+
+
 
 	if((temperature < FIRE_MINIMUM_TEMPERATURE_TO_EXIST) || (volume <= 1))
 		Kill()
 		return
 
-	if(!location.air || location.air.toxins < 0.5 || location.air.oxygen < 0.5)
+	if(combustibles < 0.5 || oxidants < 0.5)
 		Kill()
 		return
 

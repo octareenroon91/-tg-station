@@ -119,6 +119,25 @@
 		air_contents.trace_gases += trace_gas
 		trace_gas.moles = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
+/obj/machinery/atmospherics/miner/volatile_fuel
+	name = "\improper Volatile Fuel Miner"
+	overlay_color = "#AACCAA"
+
+/obj/machinery/atmospherics/miner/volatile_fuel/AddAir()
+		var/datum/gas/volatile_fuel/trace_gas = new
+		air_contents.trace_gases += trace_gas
+		trace_gas.moles = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+
+/obj/machinery/atmospherics/miner/agent_b
+	name = "\improper Oxygen Agent B Miner"
+	overlay_color = "#077FFF"
+
+/obj/machinery/atmospherics/miner/agent_b/AddAir()
+		var/datum/gas/oxygen_agent_b/trace_gas = new
+		air_contents.trace_gases += trace_gas
+		trace_gas.moles = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+
+
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
 	overlay_color = "#CCFFCC"

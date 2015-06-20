@@ -121,8 +121,11 @@ What are the archived variables for?
 		graphic = "plasma"
 	else
 		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in trace_gases
+		var/datum/gas/volatile_fuel = locate(/datum/gas/volatile_fuel) in trace_gases
 		if(sleeping_agent && (sleeping_agent.moles > 1))
 			graphic = "sleeping_agent"
+		if(volatile_fuel && (volatile_fuel.moles > 1))
+			graphic = "volatile_fuel"
 		else
 			graphic = null
 
@@ -162,35 +165,19 @@ What are the archived variables for?
 	var/energy_released = 0
 	var/old_heat_capacity = heat_capacity()
 
-	var/datum/gas/volatile_fuel/fuel_store = locate(/datum/gas/volatile_fuel/) in trace_gases
+	var/datum/gas/volatile_fuel/fuel = locate(/datum/gas/volatile_fuel/) in trace_gases
 	var/datum/gas/sleeping_agent/oxidizer = locate(/datum/gas/sleeping_agent) in trace_gases
-	if(fuel_store) //General volatile gas burn
-		var/burned_fuel = 0
+	var/fuel_moles = fuel ? fuel.moles : 0
+	var/oxidizer_moles = oxidizer ? oxidizer.moles : 0
+	var/oxidants = oxygen + oxidizer_moles
+	var/combustibles = toxins + fuel_moles
 
-		if(oxygen < fuel_store.moles)
-			burned_fuel = oxygen
-			fuel_store.moles -= burned_fuel
-			oxygen = 0
-		else
-			burned_fuel = fuel_store.moles
-			oxygen -= fuel_store.moles
-			trace_gases -= fuel_store
-			fuel_store = null
-
-		energy_released += FIRE_CARBON_ENERGY_RELEASED * burned_fuel
-		carbon_dioxide += burned_fuel
-		fuel_burnt += burned_fuel
-
-	//Handle plasma burning
-	if(toxins > MINIMUM_HEAT_CAPACITY)
+	//Handle general burning
+	if(combustibles > MINIMUM_HEAT_CAPACITY)
 		var/oxidizer_burn_rate = 0
 		var/plasma_burn_rate = 0
 		var/oxygen_burn_rate = 0
-		var/n2o_moles //Not always present
-		if (oxidizer)
-			n2o_moles = oxidizer.moles
-		else
-			n2o_moles = 0
+		var/volatile_burn_rate = 0
 		//more plasma released at higher temperatures
 		var/temperature_scale
 		if(temperature > PLASMA_UPPER_TEMPERATURE)
@@ -198,22 +185,27 @@ What are the archived variables for?
 		else
 			temperature_scale = (temperature-PLASMA_MINIMUM_BURN_TEMPERATURE)/(PLASMA_UPPER_TEMPERATURE-PLASMA_MINIMUM_BURN_TEMPERATURE)
 		if(temperature_scale > 0)
-			oxidizer_burn_rate = (n2o_moles*temperature_scale)/2 //Burns slower than plasma but faster than oxygen
+			oxidizer_burn_rate = (oxidizer_moles*temperature_scale)/2 //Burns slower than plasma but faster than oxygen
+			volatile_burn_rate = 3 - temperature_scale //Should burn fast
 			oxygen_burn_rate = 1.4 - temperature_scale
-			if(oxygen + n2o_moles > toxins*PLASMA_OXYGEN_FULLBURN)
-				plasma_burn_rate = ((toxins*temperature_scale)+n2o_moles)/4
+			if(oxidants > toxins*PLASMA_OXYGEN_FULLBURN)
+				plasma_burn_rate = ((toxins*temperature_scale)+oxidizer_moles/4)
 			else
-				plasma_burn_rate = (temperature_scale*(oxygen/PLASMA_OXYGEN_FULLBURN)+n2o_moles)/4
-			if(plasma_burn_rate > MINIMUM_HEAT_CAPACITY)
+				plasma_burn_rate = (temperature_scale*(oxygen/PLASMA_OXYGEN_FULLBURN)+oxidizer_moles)/4
+			var/fuel_burn_rate = plasma_burn_rate + volatile_burn_rate
+			if(fuel_burn_rate > MINIMUM_HEAT_CAPACITY)
 				toxins -= plasma_burn_rate
-				oxygen -= plasma_burn_rate*oxygen_burn_rate
+				oxygen -= fuel_burn_rate*oxygen_burn_rate
 				if(oxidizer)
-					oxidizer.moles -= plasma_burn_rate*oxidizer_burn_rate
-				carbon_dioxide += plasma_burn_rate
+					oxidizer.moles -= fuel_burn_rate*oxidizer_burn_rate
+				if(fuel)
+					fuel.moles -= volatile_burn_rate
+				carbon_dioxide += fuel_burn_rate
 
 				energy_released += FIRE_PLASMA_ENERGY_RELEASED * (plasma_burn_rate)
+				energy_released += FIRE_CARBON_ENERGY_RELEASED * (volatile_burn_rate)
 
-				fuel_burnt += (plasma_burn_rate)*(1+oxygen_burn_rate+oxidizer_burn_rate)
+				fuel_burnt += (fuel_burn_rate)*(1+oxygen_burn_rate+oxidizer_burn_rate)
 
 	if(energy_released > 0)
 		var/new_heat_capacity = heat_capacity()
@@ -270,7 +262,7 @@ What are the archived variables for?
 
 //	check_me_then_share(datum/gas_mixture/sharer)
 	//Similar to share(...) but first checks to see if amount of air moved is small enough
-	//	that group processing is still accurate for source (aborts if not)
+	//	that group processing is still accurate for source (aborts if not)f
 	//Returns: 1 on successful share, 0 if the check failed
 
 //	check_me_then_mimic(turf/model)
