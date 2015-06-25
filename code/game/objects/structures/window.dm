@@ -386,7 +386,7 @@
 	dir = ini_dir
 	move_update_air(T)
 
-/obj/structure/window/CanAtmosPass(turf/T)
+/obj/structure/window/CanPass(turf/T)
 	if(get_dir(loc, T) == dir)
 		return !density
 	if(dir == SOUTHWEST || dir == SOUTHEAST || dir == NORTHWEST || dir == NORTHEAST)

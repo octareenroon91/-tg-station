@@ -86,7 +86,7 @@
 	user.visible_message("<span class='notice'>[user] rubs some dust off from the [name]'s surface.</span>", \
 						 "<span class='notice'>You rub some dust off from the [name]'s surface.</span>")
 
-/obj/structure/statue/CanAtmosPass()
+/obj/structure/statue/CanPass()
 	return !density
 
 /obj/structure/statue/bullet_act(obj/item/projectile/Proj)

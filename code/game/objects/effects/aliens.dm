@@ -41,7 +41,7 @@
 	..()
 	move_update_air(T)
 
-/obj/structure/alien/resin/CanAtmosPass()
+/obj/structure/alien/resin/CanPass()
 	return !density
 
 /obj/structure/alien/resin/wall
@@ -54,8 +54,6 @@
 	..()
 	relativewall_neighbours()
 
-/obj/structure/alien/resin/wall/BlockSuperconductivity()
-	return 1
 
 /obj/structure/alien/resin/wall/shadowling //For chrysalis
 	name = "chrysalis wall"

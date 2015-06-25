@@ -111,6 +111,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/debug_controller,
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_admin_delete,
+	/client/proc/Test_ZAS_Connection,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,

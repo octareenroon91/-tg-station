@@ -56,7 +56,7 @@
 #define PLASMA_MINIMUM_BURN_TEMPERATURE		100+T0C
 #define PLASMA_UPPER_TEMPERATURE			1370+T0C
 #define PLASMA_MINIMUM_OXYGEN_NEEDED		2
-#define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	30
+#define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
 #define PLASMA_OXYGEN_FULLBURN				10
 #define MIN_PLASMA_DAMAGE					1
 #define MAX_PLASMA_DAMAGE					10
@@ -112,3 +112,10 @@
 
 #define MAX_OUTPUT_PRESSURE					4500 // (kPa) What pressure pumps and powered equipment max out at.
 #define MAX_TRANSFER_RATE					200 // (L/s) Maximum speed powered equipment can work at.
+
+#define BASE_ZAS_FUEL_REQ	0.1
+
+#define AIR_BLOCKED 1
+#define ZONE_BLOCKED 2
+#define BLOCKED 3
+
