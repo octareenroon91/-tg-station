@@ -79,11 +79,7 @@
 	else
 		return 1
 
-/obj/machinery/door/window/CanAtmosPass(var/turf/T)
-	if(get_dir(loc, T) == dir)
-		return !density
-	else
-		return 1
+
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)

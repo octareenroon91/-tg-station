@@ -258,6 +258,3 @@
 /obj/structure/foamedmetal/CanPass(atom/movable/mover, turf/target, height=1.5)
 	return !density
 
-
-/obj/structure/foamedmetal/CanAtmosPass()
-	return !density

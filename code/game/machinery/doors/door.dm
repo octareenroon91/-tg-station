@@ -80,9 +80,6 @@
 		return !opacity
 	return !density
 
-/obj/machinery/door/CanAtmosPass()
-	return !density
-
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density
@@ -279,10 +276,6 @@
 /obj/machinery/door/proc/hasPower()
 	return !(stat & NOPOWER)
 
-/obj/machinery/door/BlockSuperconductivity()
-	if(opacity || heat_proof)
-		return 1
-	return 0
 
 /obj/machinery/door/morgue
 	icon = 'icons/obj/doors/doormorgue.dmi'

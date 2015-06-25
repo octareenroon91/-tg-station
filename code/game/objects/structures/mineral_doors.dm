@@ -60,9 +60,6 @@
 		return !opacity
 	return !density
 
-/obj/structure/mineral_door/CanAtmosPass()
-	return !density
-
 /obj/structure/mineral_door/proc/TryToSwitchState(atom/user)
 	if(isSwitchingStates) return
 	if(ismob(user))
