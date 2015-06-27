@@ -54,7 +54,7 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor
 	name = "firelock"
 	desc = "Apply crowbar."
-	icon = 'icons/obj/doors/Doorfireglass.dmi'
+	icon = 'icons/obj/doors/Doorhazard.dmi'
 	icon_state = "door_open"
 	opacity = 0
 	density = 0
@@ -113,7 +113,7 @@ var/global/list/alert_overlays_global = list()
 			spawn(1)
 				qdel(src)
 			return .
-	var/area/A = get_area(src)
+/*	var/area/A = get_area(src)
 	ASSERT(istype(A))
 
 	A.all_doors.Add(src)
@@ -124,6 +124,12 @@ var/global/list/alert_overlays_global = list()
 		if(istype(A) && !(A in areas_added))
 			A.all_doors.Add(src)
 			areas_added += A
+
+/obj/machinery/door/firedoor/Destroy()
+	for(var/area/A in areas_added)
+		A.all_doors.Remove(src)
+	. = ..()
+*/
 
 /obj/machinery/door/firedoor/examine(mob/user)
 	. = ..()
@@ -165,10 +171,6 @@ var/global/list/alert_overlays_global = list()
 		user << "These people have opened \the [src] during an alert: [users_to_open_string]."
 
 
-/obj/machinery/door/firedoor/Destroy()
-	for(var/area/A in areas_added)
-		A.all_doors.Remove(src)
-	. = ..()
 
 /obj/machinery/door/firedoor/Bumped(atom/AM)
 	if(p_open || operating)	return
@@ -226,20 +228,80 @@ var/global/list/alert_overlays_global = list()
 
 
 /obj/machinery/door/firedoor/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	if(density)
 		icon_state = "door_closed"
 		if(blocked)
 			overlays += "welded"
+		if(pdiff_alert)
+			overlays += "palert"
+		if(dir_alerts)
+			for(var/d=1;d<=4;d++)
+				var/cdir = cardinal[d]
+				// Loop while i = [1, 3], incrementing each loop
+				for(var/i=1;i<=ALERT_STATES.len;i++) //
+					if(dir_alerts[d] & (1<<(i-1))) // Check to see if dir_alerts[d] has the i-1th bit set.
+						var/list/state_list = alert_overlays_local["alert_[ALERT_STATES[i]]"]
+						if(flags & ON_BORDER)
+							overlays += turn(state_list["[turn(cdir, dir2angle(src.dir))]"], dir2angle(src.dir))
+						else
+							overlays += state_list["[cdir]"]
 	else
 		icon_state = "door_open"
 		if(blocked)
 			overlays += "welded_open"
 	return
 
+
+/obj/machinery/door/firedoor/process()
+	..()
+
+	if(density)
+		var/changed = 0
+		lockdown=0
+		// Pressure alerts
+		pdiff = getOPressureDifferential(src.loc)
+		if(pdiff >= FIREDOOR_MAX_PRESSURE_DIFF)
+			lockdown = 1
+			if(!pdiff_alert)
+				pdiff_alert = 1
+				changed = 1 // update_icon()
+		else
+			if(pdiff_alert)
+				pdiff_alert = 0
+				changed = 1 // update_icon()
+
+		tile_info = getCardinalAirInfo(src,src.loc,list("temperature","pressure"))
+		var/old_alerts = dir_alerts
+		for(var/index = 1; index <= 4; index++)
+			var/list/tileinfo=tile_info[index]
+			if(tileinfo==null)
+				continue // Bad data.
+			var/celsius = convert_k2c(tileinfo[1])
+
+			var/alerts=0
+
+			// Temperatures
+			if(celsius >= FIREDOOR_MAX_TEMP)
+				alerts |= FIREDOOR_ALERT_HOT
+				lockdown = 1
+			else if(celsius <= FIREDOOR_MIN_TEMP)
+				alerts |= FIREDOOR_ALERT_COLD
+				lockdown = 1
+
+			dir_alerts[index]=alerts
+
+		if(dir_alerts != old_alerts)
+			changed = 1
+		if(changed)
+			update_icon()
+
+
+
 /obj/machinery/door/firedoor/open()
 	..()
 	latetoggle()
+	layer = base_layer
 	return
 
 /obj/machinery/door/firedoor/close()
@@ -248,6 +310,7 @@ var/global/list/alert_overlays_global = list()
 		open()
 		return
 	latetoggle()
+	layer = base_layer + FIREDOOR_CLOSED_MOD
 	return
 
 /obj/machinery/door/firedoor/proc/latetoggle()
@@ -264,16 +327,27 @@ var/global/list/alert_overlays_global = list()
 
 
 /obj/machinery/door/firedoor/border_only
-	icon = 'icons/obj/doors/edge_Doorfire.dmi'
+	icon = 'icons/obj/doors/edge_Doorhazard.dmi'
+	glass = 1 //There is a glass window so you can see through the door
+			  //This is needed due to BYOND limitations in controlling visibility
+	heat_proof = 1
+//	air_properties_vary_with_direction = 1
 	flags = ON_BORDER
 
-/obj/machinery/door/firedoor/border_only/CanPass(atom/movable/mover, turf/target, height=0)
+/obj/machinery/door/firedoor/border_only/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
+
 	if(get_dir(loc, target) == dir) //Make sure looking at appropriate border
+		//if(air_group) return 0
 		return !density
 	else
 		return 1
+
+//used in the AStar algorithm to determinate if the turf the door is on is passable
+/obj/machinery/door/firedoor/CanAStarPass()
+	return !density
+
 
 /obj/machinery/door/firedoor/border_only/CheckExit(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
@@ -282,7 +356,6 @@ var/global/list/alert_overlays_global = list()
 		return !density
 	else
 		return 1
-
 
 /obj/machinery/door/firedoor/heavy
 	name = "heavy firelock"

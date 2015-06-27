@@ -1,3 +1,9 @@
+#define BLOB_PROBABILITY 40
+#define HEADBUTT_PROBABILITY 40
+#define BRAINLOSS_FOR_HEADBUTT 60
+
+#define DOOR_LAYER		2.7
+#define DOOR_CLOSED_MOD	0.4 //how much the layer is increased when the door is closed
 
 /obj/machinery/door
 	name = "door"
@@ -7,7 +13,8 @@
 	anchored = 1
 	opacity = 1
 	density = 1
-	layer = 2.7
+	layer = DOOR_LAYER
+	var/base_layer = DOOR_LAYER
 	power_channel = ENVIRON
 
 	var/secondsElectrified = 0
@@ -23,9 +30,9 @@
 /obj/machinery/door/New()
 	..()
 	if(density)
-		layer = 3.1 //Above most items if closed
+		layer = DOOR_LAYER + DOOR_CLOSED_MOD //Above most items if closed
 	else
-		layer = 2.7 //Under all objects if opened. 2.7 due to tables being at 2.6
+		layer = DOOR_LAYER //Under all objects if opened. 2.7 due to tables being at 2.6
 	update_freelook_sight()
 	air_update_turf(1)
 	airlocks += src
@@ -221,7 +228,7 @@
 	sleep(5)
 	src.density = 0
 	sleep(5)
-	src.layer = 2.7
+	src.layer = DOOR_LAYER
 	update_icon()
 	src.set_opacity(0)
 	operating = 0
@@ -238,7 +245,7 @@
 	operating = 1
 
 	do_animate("closing")
-	src.layer = 3.1
+	src.layer = DOOR_LAYER + DOOR_CLOSED_MOD
 	sleep(5)
 	src.density = 1
 	sleep(5)
