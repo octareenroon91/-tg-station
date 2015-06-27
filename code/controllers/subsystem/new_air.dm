@@ -212,8 +212,7 @@ Class Procs:
 /datum/subsystem/air/proc/process_turfs()
 	if(tiles_to_update.len)
 		for(var/turf/T in tiles_to_update)
-			T.update_air_properties()
-			T.post_update_air_properties()
+			T.update_air()
 			T.needs_air_update = 0
 			#ifdef ZASDBG
 			T.overlays -= mark

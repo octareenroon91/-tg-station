@@ -5,7 +5,7 @@
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
-/turf/simulated/proc/set_graphic(const/newGraphics)
+/turf/proc/set_graphic(const/newGraphics)
 	if (!isnum(newGraphics))
 		return
 
@@ -263,7 +263,7 @@
 	air.group_multiplier = 1
 	air.volume = CELL_VOLUME
 
-/turf/simulated/proc/c_copy_air()
+/turf/proc/c_copy_air()
 	if(!air) air = new/datum/gas_mixture
 	air.copy_from(zone.air)
 	air.group_multiplier = 1

@@ -40,10 +40,15 @@ atom/movable/var/pressure_resistance = 5
 	T.air_update_turf(command)
 
 /turf/air_update_turf(command)
-	src.update_air_properties()
-	src.post_update_air_properties()
+	atmos_update()
 	return 1
 
+/turf/proc/atmos_update()
+	SSair.mark_for_update(src)
+
+/turf/proc/update_air()
+	update_air_properties()
+	post_update_air_properties()
 //Basically another way of calling CanPass(null, other, 0, 0) and CanPass(null, other, 1.5, 1).
 //Returns:
 // 0 - Not blocked
