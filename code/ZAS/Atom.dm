@@ -40,6 +40,8 @@ atom/movable/var/pressure_resistance = 5
 	T.air_update_turf(command)
 
 /turf/air_update_turf(command)
+	if(!SSair)
+		return
 	atmos_update()
 	return 1
 

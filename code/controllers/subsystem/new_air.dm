@@ -132,11 +132,11 @@ Class Procs:
 
 
 /datum/subsystem/air/Initialize(timeofday, zlevel)
+	setup_allturfs(zlevel)
 	setup_atmos_machinery(zlevel)
 	..()
 
 /datum/subsystem/air/AfterInitialize(zlevel)
-	setup_allturfs(zlevel)
 
 #define MC_AVERAGE(average, current) (0.8*(average) + 0.2*(current))
 /datum/subsystem/air/fire()
@@ -335,9 +335,8 @@ Class Procs:
 	#ifdef ZASDBG
 	ASSERT(isturf(T))
 	#endif
-	if(T.needs_air_update)
-		return
-	tiles_to_update += T
+//	if(T.needs_air_update) return
+	tiles_to_update |= T
 	#ifdef ZASDBG
 	T.overlays += mark
 	#endif
