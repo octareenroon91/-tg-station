@@ -8,7 +8,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(flags & PLASMAGUARD)
 		return 0
 	else if(istype(src, /obj/item/weapon/storage/backpack))
-		return 0 // cannot be washed :(
+		return 0 // cannot be washed :^(
 	else if(istype(src, /obj/item/clothing))
 		return 1
 	else
@@ -45,7 +45,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 /mob/living/carbon/human/pl_effects()
 	//Handles all the bad things plasma can do.
 
-	if(flags & INVULNERABLE)
+	if(flags & GODMODE)
 		return
 
 	//Contamination
@@ -66,7 +66,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 
 		//Burn eyes if exposed.
 		if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
-			var/eye_protection = get_body_part_coverage(EYES)
+			var/eye_protection = check_part_covered("eyes")
 			if(!eye_protection)
 				burn_eyes()
 
@@ -80,16 +80,17 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 
 /mob/living/carbon/human/proc/burn_eyes()
 	//The proc that handles eye burning.
-	if(!species.has_organ["eyes"])
-		return
-	var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
-	if(E)
-		if(prob(20)) src << "<span class='warning'>Your eyes burn!</span>"
-		E.damage += 2.5
-		eye_blurry = min(eye_blurry+1.5,50)
-		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
-			src << "<span class='warning'>You are blinded!</span>"
-			eye_blind += 20
+//	if(!species.has_organ["eyes"])
+//		return
+//	var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
+//	if(E)
+	if(prob(20))
+		src << "<span class='warning'>Your eyes burn!</span>"
+//	E.damage += 2.5
+	eye_blurry = min(eye_blurry+1.5,50)
+//		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
+//			src << "<span class='warning'>You are blinded!</span>"
+//			eye_blind += 20
 
 /mob/living/carbon/human/proc/pl_head_protected()
 	//Checks if the head is adequately sealed.
@@ -97,7 +98,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(head.flags & PLASMAGUARD)
 				return 1
-		else if(check_body_part_coverage(EYES))
+		else if(check_part_covered("eyes"))
 			return 1
 	return 0
 

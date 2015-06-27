@@ -18,6 +18,8 @@
 	var/fulltile = 0
 	var/obj/item/stack/rods/storedrods
 	var/obj/item/weapon/shard/storedshard
+	var/fire_temp_threshold = 800
+	var/fire_volume_mod = 100
 //	var/silicate = 0 // number of units of silicate
 //	var/icon/silicateIcon = null // the silicated icon
 
@@ -67,15 +69,12 @@
 	if(current_size >= STAGE_FIVE)
 		spawnfragments()
 
-/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0)
+/obj/structure/window/CanPass(atom/movable/mover, turf/target, height = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(dir == SOUTHWEST || dir == SOUTHEAST || dir == NORTHWEST || dir == NORTHEAST)
-		return 0	//full tile window, you can't move into it!
 	if(get_dir(loc, target) == dir)
 		return !density
-	else
-		return 1
+	return 1
 
 
 /obj/structure/window/CheckExit(atom/movable/O as mob|obj, target as turf)
@@ -386,13 +385,6 @@
 	dir = ini_dir
 	move_update_air(T)
 
-/obj/structure/window/CanPass(turf/T)
-	if(get_dir(loc, T) == dir)
-		return !density
-	if(dir == SOUTHWEST || dir == SOUTHEAST || dir == NORTHWEST || dir == NORTHEAST)
-		return !density
-	return 1
-
 //This proc is used to update the icons of nearby windows.
 /obj/structure/window/proc/update_nearby_icons()
 	update_icon()
@@ -427,6 +419,13 @@
 /obj/structure/window/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > T0C + 800)
 		hit(round(exposed_volume / 100), 0)
+	..()
+
+
+/obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > T0C + fire_temp_threshold)
+		health -= round(exposed_volume/fire_volume_mod)
+		healthcheck(sound = 0)
 	..()
 
 

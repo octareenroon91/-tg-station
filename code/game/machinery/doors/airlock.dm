@@ -230,7 +230,7 @@
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
-/obj/machinery/door/airlock/plasma/proc/ignite(exposed_temperature)
+/obj/machinery/door/airlock/plasma/proc/combust(exposed_temperature)
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
@@ -1004,7 +1004,7 @@ About the new airlock wires panel:
 	if(is_hot(C) > 300)//If the temperature of the object is over 300, then ignite
 		message_admins("Plasma airlock ignited by [key_name_admin(user)](<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) (<A HREF='?_src_=holder;adminplayerobservefollow=\ref[user]'>FLW</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
 		log_game("Plasma wall ignited by [key_name(user)] in ([x],[y],[z])")
-		ignite(is_hot(C))
+		combust(is_hot(C))
 		return
 	..()
 

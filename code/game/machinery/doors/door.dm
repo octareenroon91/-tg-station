@@ -250,6 +250,8 @@
 	update_freelook_sight()
 	return
 
+
+
 /obj/machinery/door/proc/crush()
 	for(var/mob/living/L in get_turf(src))
 		if(isalien(L))  //For xenos

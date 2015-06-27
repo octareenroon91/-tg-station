@@ -27,8 +27,8 @@ var/datum/subsystem/air/SSair
 
 
 	//Special functions lists
-	var/list/turf/simulated/active_super_conductivity = list()
-	var/list/turf/simulated/high_pressure_delta = list()
+//	var/list/turf/simulated/active_super_conductivity = list()
+//	var/list/turf/simulated/high_pressure_delta = list()
 
 
 //Geometry lists
@@ -124,7 +124,7 @@ Class Procs:
 	msg += "PN:[round(cost_pipenets,0.01)]|"
 	msg += "AM:[round(cost_atmos_machinery,0.01)]"
 	msg += "} "
-	msg +=  "AT:[active_turfs.len]|"
+	msg +=  "AT:[tiles_to_update.len]|"
 	msg +=  "EG:[edges.len]|"
 	msg +=  "HS:[active_hotspots.len]|"
 	msg +=  "ZN:[zones.len]"
@@ -149,7 +149,7 @@ Class Procs:
 	cost_atmos_machinery = MC_AVERAGE(cost_atmos_machinery, (world.timeofday - timer))
 
 	timer = world.timeofday
-	process_active_turfs()
+	process_turfs()
 	cost_turfs = MC_AVERAGE(cost_turfs, (world.timeofday - timer))
 
 	timer = world.timeofday
@@ -201,13 +201,13 @@ Class Procs:
 	for(var/obj/fire/fire in active_hotspots)
 		fire.process()
 
-
+/*
 /datum/subsystem/air/proc/process_high_pressure_delta()
 	for(var/turf/T in high_pressure_delta)
 		T.high_pressure_movements()
 		T.pressure_difference = 0
 	high_pressure_delta.len = 0
-
+*/
 
 /datum/subsystem/air/proc/process_turfs()
 	if(tiles_to_update.len)
@@ -215,21 +215,23 @@ Class Procs:
 			T.update_air_properties()
 			T.post_update_air_properties()
 			T.needs_air_update = 0
+			#ifdef ZASDBG
+			T.overlays -= mark
+			#endif
+			tiles_to_update.Remove(T)
 
 
 
 /datum/subsystem/air/proc/process_zones()
-	active_zones = zones_to_update.len
 	if(zones_to_update.len)
-		updating = zones_to_update
-		zones_to_update = list()
-		for(var/zone/zone in updating)
+		for(var/zone/zone in zones_to_update)
 			zone.tick()
 			zone.needs_update = 0
+			zones_to_update.Remove(zone)
 
 
 /datum/subsystem/air/proc/setup_allturfs(z_level)
-	active_turfs.Cut()
+	tiles_to_update.Cut()
 	var/z_start = 1
 	var/z_finish = world.maxz
 	if(1 <= z_level && z_level <= world.maxz)
@@ -277,7 +279,7 @@ Class Procs:
 /datum/subsystem/air/proc/merge(zone/A, zone/B)
 	#ifdef ZASDBG
 	ASSERT(istype(A))
-	ASSERT(istype(B))S
+	ASSERT(istype(B))
 	ASSERT(!A.invalid)
 	ASSERT(!B.invalid)
 	ASSERT(A != B)
@@ -306,7 +308,7 @@ Class Procs:
 	var/space = (!istype(B))
 
 	if(direct && !space)
-		if(equivalent_pressure(A.zone,B.zone) || current_cycle == 0)
+		if(equivalent_pressure(A.zone,B.zone))
 			merge(A.zone,B.zone)
 			return
 
@@ -334,8 +336,9 @@ Class Procs:
 	#ifdef ZASDBG
 	ASSERT(isturf(T))
 	#endif
-	if(T.needs_air_update) return
-	tiles_to_update |= T
+	if(T.needs_air_update)
+		return
+	tiles_to_update += T
 	#ifdef ZASDBG
 	T.overlays += mark
 	#endif
@@ -367,7 +370,7 @@ Class Procs:
 		edges.Add(edge)
 		return edge
 
-/datum/subsystem/air/roc/has_same_air(turf/A, turf/B)
+/datum/subsystem/air/proc/has_same_air(turf/A, turf/B)
 	if(A.oxygen != B.oxygen) return 0
 	if(A.nitrogen != B.nitrogen) return 0
 	if(A.toxins != B.toxins) return 0

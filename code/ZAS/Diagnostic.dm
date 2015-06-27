@@ -1,16 +1,10 @@
-/*
+
 client/proc/ZoneTick()
 	set category = "Debug"
 	set name = "Process Atmos"
 
-	var/result = SSair.Tick()
-	if(result)
-		src << "Sucessfully Processed."
+	SSair.fire()
 
-	else
-		src << "Failed to process! ([SSair.tick_progress])"
-
-*/
 client/proc/Zone_Info(turf/T as null|turf)
 	set category = "Debug"
 	if(T)

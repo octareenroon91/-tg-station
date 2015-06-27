@@ -371,7 +371,7 @@ update_flag
 
 	..()
 
-	src.air_contents.toxins = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 	src.update_icon()
 	return 1
@@ -380,7 +380,7 @@ update_flag
 
 	..()
 
-	src.air_contents.oxygen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	src.air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 	src.update_icon()
 	return 1
@@ -389,9 +389,9 @@ update_flag
 
 	..()
 
-	var/datum/gas/sleeping_agent/trace_gas = new
-	air_contents.trace_gases += trace_gas
-	trace_gas.moles = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	var/datum/gas/sleeping_agent/sleeping_agent = new
+	sleeping_agent.moles = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
+	air_contents.adjust(traces = list(sleeping_agent))
 
 	src.update_icon()
 	return 1
@@ -414,7 +414,7 @@ update_flag
 
 	..()
 
-	src.air_contents.nitrogen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	air_contents.adjust(n2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 	src.update_icon()
 	return 1
@@ -422,7 +422,7 @@ update_flag
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide/New()
 
 	..()
-	src.air_contents.carbon_dioxide = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	air_contents.adjust(co2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 	src.update_icon()
 	return 1
@@ -431,8 +431,10 @@ update_flag
 /obj/machinery/portable_atmospherics/canister/air/New()
 
 	..()
-	src.air_contents.oxygen = (O2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-	src.air_contents.nitrogen = (N2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	air_contents.adjust(\
+		(O2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),\
+		n2 = (N2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)\
+	)
 
 	src.update_icon()
 	return 1

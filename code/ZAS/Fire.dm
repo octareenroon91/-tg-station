@@ -86,9 +86,9 @@ Attach to transfer valve and open. BOOM.
 	return null
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
-	var/obj/effect/effect/foam/fire/W = locate() in contents
-	if(istype(W))
-		return 0
+//	var/obj/effect/effect/foam/fire/W = locate() in contents
+//	if(istype(W))
+//		return 0
 	if(fire_protection > world.time-300)
 		return 0
 	if(locate(/obj/fire) in src)
@@ -125,6 +125,7 @@ Attach to transfer valve and open. BOOM.
 
 	anchored = 1
 	mouse_opacity = 0
+	var/stage = 1	//used so the lighting system doesn't croak
 
 	blend_mode = BLEND_ADD
 
@@ -136,7 +137,8 @@ Attach to transfer valve and open. BOOM.
 
 
 /obj/fire/proc/Kill()
-	Extinguish
+	Extinguish()
+
 /obj/fire/proc/Extinguish()
 	var/turf/simulated/S=loc
 
@@ -185,21 +187,28 @@ Attach to transfer valve and open. BOOM.
 		return
 
 	//get a firelevel and set the icon
+	var/cache_stage = stage		//MUH LAG
 	var/firelevel = air_contents.calculate_firelevel(S)
 
 	if(firelevel > 6)
 		icon_state = "3"
-		set_light(7, 3)
+		stage = 3
+		if(stage != cache_stage)
+			set_light(7, 3)
 	else if(firelevel > 2.5)
 		icon_state = "2"
-		set_light(5, 2)
+		stage = 2
+		if(stage != cache_stage)
+			set_light(5, 2)
 	else
 		icon_state = "1"
-		set_light(3, 1)
+		stage = 1
+		if(stage != cache_stage)
+			set_light(3, 1)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
-	for(var/mob/living/carbon/human/M in loc)
-		M.FireBurn(firelevel, air_contents.temperature, air_contents.return_pressure() ) //Burn the humans!
+//	for(var/mob/living/carbon/human/M in loc)
+//		M.FireBurn(firelevel, air_contents.temperature, air_contents.return_pressure() ) //Burn the humans!
 
 	for(var/atom/A in loc)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
@@ -221,10 +230,10 @@ Attach to transfer valve and open. BOOM.
 				if(!acs.check_recombustability(enemy_tile)) continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
-				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
-				if(istype(W))
-					firelevel -= 3
-					continue
+//				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
+//				if(istype(W))
+//					firelevel -= 3
+//					continue
 				if(enemy_tile.fire_protection > world.time-30)
 					firelevel -= 1.5
 					continue
@@ -433,7 +442,7 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 
 	return max( 0, firelevel)
 
-
+/*
 /mob/living/proc/FireBurn(var/firelevel, var/last_temperature, var/pressure)
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)
 	apply_damage(2.5*mx, BURN)
@@ -458,9 +467,9 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 		if( C.max_heat_protection_temperature >= last_temperature )
 			if(C.body_parts_covered & HEAD)
 				head_exposure = 0
-			if(C.body_parts_covered & UPPER_TORSO)
+			if(C.body_parts_covered & CHEST)
 				chest_exposure = 0
-			if(C.body_parts_covered & LOWER_TORSO)
+			if(C.body_parts_covered & GROIN)
 				groin_exposure = 0
 			if(C.body_parts_covered & LEGS)
 				legs_exposure = 0
@@ -478,3 +487,5 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	apply_damage(0.6*mx*legs_exposure, BURN, "r_leg", 0, 0, "Fire")
 	apply_damage(0.4*mx*arms_exposure, BURN, "l_arm", 0, 0, "Fire")
 	apply_damage(0.4*mx*arms_exposure, BURN, "r_arm", 0, 0, "Fire")
+
+*/

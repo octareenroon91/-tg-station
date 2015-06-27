@@ -2,8 +2,9 @@
 /obj/structure/shuttle
 	name = "shuttle"
 	icon = 'icons/turf/shuttle.dmi'
-	height = 1
 
+/obj/structure/shuttle/CanPass()
+	return 0
 
 /obj/structure/shuttle/engine
 	name = "engine"

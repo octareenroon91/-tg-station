@@ -243,7 +243,7 @@ var/list/admin_verbs_hideable = list(
 		/client/proc/camera_view,
 		/client/proc/sec_camera_report,
 		/client/proc/intercom_view,
-		/client/proc/air_status,
+//		/client/proc/air_status,
 		/client/proc/atmosscan,
 		/client/proc/powerdebug,
 		/client/proc/count_objects_on_z_level,

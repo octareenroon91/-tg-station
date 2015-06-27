@@ -29,14 +29,20 @@ atom/movable/var/pressure_resistance = 5
 
 		return 1
 
-/atom/proc/air_update_turf(var/command)
-	var/T = get_turf(src)
+
+/atom/movable/proc/move_update_air(var/turf/T)
+    if(istype(T,/turf))
+        T.air_update_turf(1)
+    air_update_turf(1)
+
+/atom/proc/air_update_turf(command)
+	var/turf/T = get_turf(src)
 	T.air_update_turf(command)
 
-/turf/air_update_turf(var/command)
-	if(command)
-		update_values()
-	SSair.mark_for_update(src)
+/turf/air_update_turf(command)
+	src.update_air_properties()
+	src.post_update_air_properties()
+	return 1
 
 //Basically another way of calling CanPass(null, other, 0, 0) and CanPass(null, other, 1.5, 1).
 //Returns:

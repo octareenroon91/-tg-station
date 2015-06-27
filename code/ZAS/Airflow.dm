@@ -241,8 +241,8 @@ proc/AirflowSpace(zone/A)
 	return 1
 
 /mob/AirflowCanPush()
-	if (M_HARDCORE in mutations)
-		return 0
+//	if (M_HARDCORE in mutations)
+//		return 0
 	return 1
 
 /atom/movable/proc/GotoAirflowDest(n)
@@ -250,16 +250,8 @@ proc/AirflowSpace(zone/A)
 	if(airflow_dest == loc)
 		return
 	if(ismob(src))
-		if(src:status_flags & GODMODE)
-			return
-		if(istype(src, /mob/living/carbon/human))
-			if(src:buckled)
-				return
-			if(src:shoes)
-				if(istype(src:shoes, /obj/item/clothing/shoes/magboots))
-					if(src:shoes:magpulse)
-						return
 		src << "<SPAN CLASS='warning'>You are sucked away by airflow!</SPAN>"
+		playsound(src, 'sound/effects/space_wind.ogg', 50, 1)
 	var/airflow_falloff = 9 - ul_FalloffAmount(airflow_dest) //It's a fast falloff calc.  Very useful.
 	if(airflow_falloff < 1)
 		airflow_dest = null
@@ -295,9 +287,9 @@ proc/AirflowSpace(zone/A)
 			if(!isturf(loc))
 				break
 			step_towards(src, src.airflow_dest)
-			if(ismob(src) && src:client)
-				var/mob/M = src
-				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
+//			if(ismob(src) && src:client)
+//				var/mob/M = src
+//				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
 		airflow_dest = null
 		airflow_speed = 0
 		airflow_time = 0
@@ -308,17 +300,9 @@ proc/AirflowSpace(zone/A)
 /atom/movable/proc/RepelAirflowDest(n)
 	if(airflow_dest == loc)
 		step_away(src,loc)
-	if(ismob(src))
-		if(src:status_flags & GODMODE)
-			return
-		if(istype(src, /mob/living/carbon/human))
-			if(src:buckled)
-				return
-			if(src:shoes)
-				if(istype(src:shoes, /obj/item/clothing/shoes/magboots))
-					if(src:shoes.flags & NOSLIP)
-						return
+	if(isliving(src))
 		src << "<SPAN CLASS='warning'>You are pushed away by airflow!</SPAN>"
+		playsound(src, 'sound/effects/space_wind.ogg', 50, 1)
 		last_airflow = world.time
 	var/airflow_falloff = 9 - ul_FalloffAmount(airflow_dest) //It's a fast falloff calc.  Very useful.
 	if(airflow_falloff < 1)
@@ -349,14 +333,43 @@ proc/AirflowSpace(zone/A)
 			if (!isturf(loc))
 				return
 			step_towards(src, src.airflow_dest)
-			if(ismob(src) && src:client)
-				var/mob/M = src
-				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
+//			if(ismob(src) && src:client)
+//				var/mob/M = src
+//				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
 		airflow_dest = null
 		airflow_speed = 0
 		airflow_time = 0
 		if(od)
 			density = 0
+
+/mob/living/RepelAirflowDest(n)
+	if(status_flags & GODMODE)
+		return
+	if(buckled)
+		return
+	..()
+
+/mob/living/carbon/human/RepelAirflowDest(n)
+	if(src.shoes)
+		if(src.shoes.flags & NOSLIP)
+			return
+	..()
+
+
+/mob/living/GotoAirflowDest(n)
+	if(status_flags & GODMODE)
+		return
+	if(buckled)
+		return
+	..()
+
+/mob/living/carbon/human/GotoAirflowDest(n)
+	if(src.shoes)
+		if(src.shoes.flags & NOSLIP)
+			return
+	..()
+
+
 
 /atom/movable/Bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
@@ -365,24 +378,23 @@ proc/AirflowSpace(zone/A)
 		airflow_speed = 0
 		airflow_time = 0
 		. = ..()
-	sound_override = 0
 
 atom/movable/proc/airflow_hit(atom/A)
 	airflow_speed = 0
 	airflow_dest = null
 
 mob/airflow_hit(atom/A)
-	if(!sound_override)
-		for(var/mob/M in hearers(src))
-			M.show_message("<span class='danger'>\The [src] slams into \a [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
+//	if(!sound_override)
+	for(var/mob/M in hearers(src))
+		M.show_message("<span class='danger'>\The [src] slams into \a [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	weakened = max(weakened, (istype(A,/obj/item) ? A:w_class : rand(1,5))) //Heheheh
 	. = ..()
 
 obj/airflow_hit(atom/A)
-	if(!sound_override)
-		for(var/mob/M in hearers(src))
-			M.show_message("<span class='danger'>\The [src] slams into \a [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
+//	if(!sound_override)
+	for(var/mob/M in hearers(src))
+		M.show_message("<span class='danger'>\The [src] slams into \a [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	. = ..()
 
@@ -394,8 +406,9 @@ mob/living/carbon/human/airflow_hit(atom/A)
 //	for(var/mob/M in hearers(src))
 //		M.show_message("<span class='danger'>[src] slams into [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "punch", 25, 1, -1)
-//	if(prob(33))
-//		loc:add_blood(src)
+	if(prob(33))
+		var/turf/T = src.loc
+		T.add_blood(src)
 //		bloody_body(src)
 
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
@@ -422,6 +435,6 @@ zone/proc/movables()
 	. = list()
 	for(var/turf/T in contents)
 		for(var/atom/A in T)
-			if(istype(A, /obj/effect) || isobserver(A) || isAIEye(A))
+			if(istype(A, /obj/effect) || isobserver(A) || iseye(A))
 				continue
 			. += A

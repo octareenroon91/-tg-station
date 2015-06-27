@@ -327,9 +327,9 @@
 		areaInstance.contents += T1
 
 		//copy over air
-		if(istype(T1, /turf/simulated))
-			var/turf/simulated/Ts1 = T1
-			Ts1.copy_air_with_tile(T0)
+//		if(istype(T1, /turf/simulated))
+//			var/turf/simulated/Ts1 = T1
+//			Ts1.copy_air_with_tile(T0)
 
 		//move mobile to new location
 		loc = S1.loc
@@ -377,16 +377,14 @@
 	//air system updates
 	for(var/turf/T1 in L1)
 //		T1.shift_to_subarea()
-		SSair.remove_from_active(T1)
-		T1.CalculateAdjacentTurfs()
-		SSair.add_to_active(T1,1)
+//		T1.CalculateAdjacentTurfs()
+		SSair.mark_for_update(T1)
 
 
 	for(var/turf/T0 in L0)
 //		T0.shift_to_subarea()
-		SSair.remove_from_active(T0)
-		T0.CalculateAdjacentTurfs()
-		SSair.add_to_active(T0,1)
+//		T0.CalculateAdjacentTurfs()
+		SSair.mark_for_update(T0)
 
 	spawn(5)
 		for(var/turf/T in L1)

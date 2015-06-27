@@ -1,6 +1,6 @@
-/turf/simulated/var/zone/zone
-/turf/simulated/var/open_directions
-/turf/simulated/var/list/gasGraphics
+/turf/var/zone/zone
+/turf/var/open_directions
+/turf/var/list/gasGraphics
 
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
@@ -31,11 +31,11 @@
 
 		overlays += overlayGraphics
 		gasGraphics = overlayGraphics.Copy()
-
+/*
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
 	if(block & AIR_BLOCKED)
-		//dbg(blocked)
+//		dbg(blocked)
 		return 1
 
 	#ifdef ZLEVELS
@@ -66,8 +66,8 @@
 			if(SSair.has_valid_zone(sim))
 
 				SSair.connect(sim, src)
-
-/turf/simulated/update_air_properties()
+*/
+/turf/proc/update_air_properties()
 	if(zone && zone.invalid)
 		c_copy_air()
 		zone = null //Easier than iterating through the list at the zone.
@@ -75,8 +75,8 @@
 	var/s_block = c_airblock(src)
 	if(s_block & AIR_BLOCKED)
 		#ifdef ZASDBG
-		if(verbose) world << "Self-blocked."
-		//dbg(blocked)
+//		if(verbose) world << "Self-blocked."
+		dbg(blocked)
 		#endif
 		if(zone)
 			var/zone/z = zone
@@ -106,8 +106,8 @@
 		if(block & AIR_BLOCKED)
 
 			#ifdef ZASDBG
-			if(verbose) world << "[d] is blocked."
-			//unsim.dbg(air_blocked, turn(180,d))
+//			if(verbose) world << "[d] is blocked."
+			unsim.dbg(air_blocked, turn(180,d))
 			#endif
 
 			continue
@@ -116,8 +116,8 @@
 		if(r_block & AIR_BLOCKED)
 
 			#ifdef ZASDBG
-			if(verbose) world << "[d] is blocked."
-			//dbg(air_blocked, d)
+//			if(verbose) world << "[d] is blocked."
+			dbg(air_blocked, d)
 			#endif
 
 			//Check that our zone hasn't been cut off recently.
@@ -143,8 +143,8 @@
 					//if((block & ZONE_BLOCKED) || (r_block & ZONE_BLOCKED && !(s_block & ZONE_BLOCKED)))
 					if(((block & ZONE_BLOCKED) && !(r_block & ZONE_BLOCKED)) || (r_block & ZONE_BLOCKED && !(s_block & ZONE_BLOCKED)))
 						#ifdef ZASDBG
-						if(verbose) world << "[d] is zone blocked."
-						//dbg(zone_blocked, d)
+//						if(verbose) world << "[d] is zone blocked."
+						dbg(zone_blocked, d)
 						#endif
 
 						//Postpone this tile rather than exit, since a connection can still be made.
@@ -157,22 +157,22 @@
 
 						#ifdef ZASDBG
 						dbg(assigned)
-						if(verbose) world << "Added to [zone]"
+//						if(verbose) world << "Added to [zone]"
 						#endif
 
 				else if(sim.zone != zone)
 
 					#ifdef ZASDBG
-					if(verbose) world << "Connecting to [sim.zone]"
+//					if(verbose) world << "Connecting to [sim.zone]"
 					#endif
 
 					SSair.connect(src, sim)
 
 
 			#ifdef ZASDBG
-				else if(verbose) world << "[d] has same zone."
+//				else if(verbose) world << "[d] has same zone."
 
-			else if(verbose) world << "[d] has invalid zone."
+//			else if(verbose) world << "[d] has invalid zone."
 			#endif
 
 		else
@@ -234,9 +234,11 @@
 /turf/simulated/assume_air(datum/gas_mixture/giver)
 	var/datum/gas_mixture/my_air = return_air()
 	my_air.merge(giver)
+	SSair.mark_for_update(src)
 
 /turf/simulated/remove_air(amount as num)
 	var/datum/gas_mixture/my_air = return_air()
+	SSair.mark_for_update(src)
 	return my_air.remove(amount)
 
 /turf/simulated/return_air()
