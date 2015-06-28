@@ -62,6 +62,7 @@ var/global/list/alert_overlays_global = list()
 	glass = 1
 	layer = DOOR_LAYER - 0.2
 	base_layer = DOOR_LAYER - 0.2
+	req_one_access = list(access_atmospherics, access_engine_equip)
 
 	dir = 2
 
@@ -207,13 +208,8 @@ var/global/list/alert_overlays_global = list()
 			return
 
 	if(istype(C, /obj/item/weapon/crowbar) || (istype(C,/obj/item/weapon/twohanded/fireaxe) && C:wielded == 1))
-		if(blocked || operating)	return
-		if(density)
-			open()
-			return
-		else	//close it up again	//fucking 10/10 commenting here einstein //bravo nolan
-			close()
-			return
+		force_open(user, C)
+		return
 
 	var/area/A = get_area_master(src)
 	ASSERT(istype(A)) // This worries me.
@@ -387,6 +383,35 @@ var/global/list/alert_overlays_global = list()
 			changed = 1
 		if(changed)
 			update_icon()
+
+
+
+
+/obj/machinery/door/firedoor/proc/force_open(mob/user, var/obj/C) //used in mecha/equipment/tools/tools.dm
+	var/area/A = get_area_master(src)
+	ASSERT(istype(A)) // This worries me.
+	var/alarmed = A.doors_down || A.fire
+
+	if( blocked )
+		user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] pries at \the [src] with \a [C], but \the [src] is welded in place!</span>",\
+		"You try to pry \the [src] [density ? "open" : "closed"], but it is welded in place!",\
+		"You hear someone struggle and metal straining.")
+		return
+
+	//thank you Tigercat2000
+	user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] forces \the [src] [density ? "open" : "closed"] with \a [C]!</span>",\
+		"You force \the [src] [density ? "open" : "closed"] with \the [C]!",\
+		"You hear metal strain, and a door [density ? "open" : "close"].")
+
+	if(density)
+		spawn(0)
+			open()
+	else
+		spawn(0)
+			close()
+	log_admin("[key_name(user)] [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at ([x],[y],[z])")
+	return
+
 
 
 

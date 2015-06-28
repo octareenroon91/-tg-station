@@ -24,6 +24,9 @@
 	if (GRAPHICS_N2O & newGraphics)
 		overlayGraphics += SSair.sleeptoxin_overlay
 
+//	if (GRAPHICS_COLD & newGraphics)
+//		overlayGraphics += SSair.ice_overlay
+
 	if (overlayGraphics.len)
 		if (gasGraphics)
 			overlays -= gasGraphics
@@ -31,7 +34,7 @@
 
 		overlays += overlayGraphics
 		gasGraphics = overlayGraphics.Copy()
-/*
+
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
 	if(block & AIR_BLOCKED)
@@ -66,8 +69,8 @@
 			if(SSair.has_valid_zone(sim))
 
 				SSair.connect(sim, src)
-*/
-/turf/proc/update_air_properties()
+
+/turf/simulated/update_air_properties()
 	if(zone && zone.invalid)
 		c_copy_air()
 		zone = null //Easier than iterating through the list at the zone.
@@ -268,6 +271,9 @@
 	air.copy_from(zone.air)
 	air.group_multiplier = 1
 
+turf/simulated/proc/copy_air_with_tile(turf/simulated/T)
+	if(istype(T) && T.air && air)
+		air.copy_from(T.air)
 
 /turf/attack_hand(mob/user as mob)
 	user.Move_Pulled(src)

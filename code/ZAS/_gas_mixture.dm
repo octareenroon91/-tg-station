@@ -130,6 +130,34 @@ What are the archived variables for?
 	if(update)
 		update_values()
 
+
+
+/datum/gas_mixture/proc/set_gas(o2, co2, n2, tx, list/datum/gas/traces = list())
+	//Purpose: Setting the gases within a airmix
+	//Called by: Nothing, yet!
+	//Inputs: The values of the gases to set
+	//Outputs: null
+
+	if(o2)
+		oxygen = max(0, o2)
+	if(co2)
+		carbon_dioxide = max(0, co2)
+	if(n2)
+		nitrogen = max(0, n2)
+	if(tx)
+		toxins = max(0, tx)
+
+	//handle trace gasses
+	for(var/datum/gas/G in traces)
+		var/datum/gas/T = locate(G.type) in trace_gases
+		if(T)
+			T.moles = max(G.moles, 0)
+		else if(G.moles > 0)
+			trace_gases |= G
+	update_values()
+	return
+
+
 /*
 /datum/gas_mixture/proc/create_reagents(var/max_vol)
 	aerosols = new /datum/reagents(max_vol)

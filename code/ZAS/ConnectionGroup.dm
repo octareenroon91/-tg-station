@@ -143,7 +143,6 @@ Class Procs:
 	A.edges.Add(src)
 	B.edges.Add(src)
 	//id = edge_id(A,B)
-	world << "New edge between [A] and [B]"
 
 /connection_edge/zone/add_connection(connection/c)
 	. = ..()

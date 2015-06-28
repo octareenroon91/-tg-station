@@ -899,7 +899,7 @@ FIRE ALARM
 		return
 
 
-/obj/machinery/firealarm/temperature_expose(datum/gas_mixture/air, temperature, volume)
+/obj/machinery/firealarm/fire_act(datum/gas_mixture/air, temperature, volume)
 	if(src.detecting)
 		if(temperature > T0C+200)
 			if(!emagged) //Doesn't give off alarm when emagged

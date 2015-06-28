@@ -93,12 +93,12 @@
 		F.color = color
 
 
-/obj/effect/effect/foam/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/effect/effect/foam/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(prob(max(0, exposed_temperature - 475))) //foam dissolves when heated
 		kill_foam()
 
 
-/obj/effect/effect/foam/metal/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/effect/effect/foam/metal/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
 
 

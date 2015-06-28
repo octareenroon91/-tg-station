@@ -1,4 +1,4 @@
-#define ZASDBG
+//#define ZASDBG
 
 #define FIRE_DAMAGE_MODIFIER	0.0215	//Higher values result in more external fire damage to the skin (default 0.0215)
 #define AIR_DAMAGE_MODIFIER		2.025	//More means less damage from hot air scalding lungs, less = more damage. (default 2.025)
@@ -121,3 +121,12 @@
 #define ZONE_BLOCKED 2
 #define BLOCKED 3
 
+
+#define AUTOIGNITION_WOOD  573.15
+#define AUTOIGNITION_PAPER 519.15
+
+#define MELTPOINT_GLASS   1500+T0C
+#define MELTPOINT_STEEL   1510+T0C
+#define MELTPOINT_SILICON 1687 // KELVIN
+#define MELTPOINT_PLASTIC 180+T0C
+#define MELTPOINT_SNOW	304.15	//about 30°C

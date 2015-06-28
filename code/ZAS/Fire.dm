@@ -38,6 +38,11 @@ Attach to transfer valve and open. BOOM.
 	new ashtype(src.loc)
 	qdel(src)
 
+
+/mob/ashify()
+	return //no
+
+
 /atom/proc/extinguish()
 	on_fire=0
 	if(fire_overlay)
@@ -82,8 +87,8 @@ Attach to transfer valve and open. BOOM.
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
-/atom/proc/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return null
+///atom/proc/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+//	return null
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
 //	var/obj/effect/effect/foam/fire/W = locate() in contents
@@ -103,9 +108,6 @@ Attach to transfer valve and open. BOOM.
 		igniting = 1
 		if(! (locate(/obj/fire) in src))
 			new /obj/fire(src)
-		for(var/atom/movable/item in src)
-			item.temperature_expose(air, air.temperature, CELL_VOLUME)
-		temperature_expose(air, air.temperature, CELL_VOLUME)
 
 	return igniting
 
@@ -219,12 +221,14 @@ Attach to transfer valve and open. BOOM.
 
 	//spread
 	for(var/direction in cardinal)
-		if(S.open_directions & direction) //Grab all valid bordering tiles
 
+		if(S.open_directions & direction) //Grab all valid bordering tiles
 			var/turf/simulated/enemy_tile = get_step(S, direction)
+
 
 			if(istype(enemy_tile))
 				var/datum/gas_mixture/acs = enemy_tile.return_air()
+
 
 				if(!acs) continue
 				if(!acs.check_recombustability(enemy_tile)) continue
@@ -290,7 +294,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		//Volatile Fuel
 			total_fuel += fuel.moles
 
-		var/can_use_turf=(T && istype(T))
+		var/can_use_turf = (T && istype(T))
 		if(can_use_turf)
 			for(var/atom/A in T)
 				if(!A) continue
