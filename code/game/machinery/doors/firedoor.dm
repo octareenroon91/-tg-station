@@ -53,7 +53,7 @@ var/global/list/alert_overlays_global = list()
 
 /obj/machinery/door/firedoor
 	name = "firelock"
-	desc = "Apply crowbar."
+	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
 	icon = 'icons/obj/doors/Doorhazard.dmi'
 	icon_state = "door_open"
 	opacity = 0
@@ -113,7 +113,7 @@ var/global/list/alert_overlays_global = list()
 			spawn(1)
 				qdel(src)
 			return .
-/*	var/area/A = get_area(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A))
 
 	A.all_doors.Add(src)
@@ -129,7 +129,7 @@ var/global/list/alert_overlays_global = list()
 	for(var/area/A in areas_added)
 		A.all_doors.Remove(src)
 	. = ..()
-*/
+
 
 /obj/machinery/door/firedoor/examine(mob/user)
 	. = ..()
@@ -173,10 +173,18 @@ var/global/list/alert_overlays_global = list()
 
 
 /obj/machinery/door/firedoor/Bumped(atom/AM)
-	if(p_open || operating)	return
-	if(!density)	return ..()
+	if(panel_open || operating)
+		return
+	if(!density)
+		return ..()
+	if(istype(AM, /obj/mecha))
+		var/obj/mecha/mecha = AM
+		if (mecha.occupant)
+			var/mob/M = mecha.occupant
+			if(world.time - M.last_bumped <= 10) return //Can bump-open one airlock per second. This is to prevent popup message spam.
+			M.last_bumped = world.time
+			attack_hand(M)
 	return 0
-
 
 /obj/machinery/door/firedoor/power_change()
 	if(powered(power_channel))
@@ -206,17 +214,101 @@ var/global/list/alert_overlays_global = list()
 		else	//close it up again	//fucking 10/10 commenting here einstein //bravo nolan
 			close()
 			return
-	return
 
-/obj/machinery/door/firedoor/attack_ai(mob/user as mob)
-	add_fingerprint(user)
-	if(blocked || operating || stat & NOPOWER)
+	var/area/A = get_area_master(src)
+	ASSERT(istype(A)) // This worries me.
+	var/alarmed = A.doors_down || A.fire
+
+	var/access_granted = 0
+	var/users_name
+	if(!istype(C, /obj)) //If someone hit it with their hand.  We need to see if they are allowed.
+		if(allowed(user))
+			access_granted = 1
+		if(ishuman(user))
+			users_name = user.name
+		else
+			users_name = "Unknown"
+
+	if( ishuman(user) &&  !stat && ( istype(C, /obj/item/weapon/card/id) || istype(C, /obj/item/device/pda) ) )
+		var/obj/item/weapon/card/id/ID = C
+
+		if( istype(C, /obj/item/device/pda) )
+			var/obj/item/device/pda/pda = C
+			ID = pda.id
+		if(!istype(ID))
+			ID = null
+
+		if(ID)
+			users_name = ID.registered_name
+
+		if(check_access(ID))
+			access_granted = 1
+
+	var/answer = "Yes"
+	if(answer == "No")
 		return
-	if(density)
-		open()
+	if(user.buckled)
+		if(!istype(user.buckled, /obj/structure/stool/bed/chair/janicart))
+			user << "Sorry, you must remain able bodied and close to \the [src] in order to use it."
+			return
+	if(user.stat || user.stunned || user.weakened || user.paralysis || get_dist(src, user) > 1)
+		user << "Sorry, you must remain able bodied and close to \the [src] in order to use it."
+		return
+
+	if(alarmed && density && lockdown && !access_granted/* && !( users_name in users_to_open ) */)
+		// Too many shitters on /vg/ for the honor system to work.
+		user << "<span class='warning'>Access denied.  Please wait for authorities to arrive, or for the alert to clear.</span>"
+		return
+		// End anti-shitter system
+		/*
+		user.visible_message("<span class='warning'>\The [src] opens for \the [user]</span>",\
+		"\The [src] opens after you acknowledge the consequences.",\
+		"You hear a beep, and a door opening.")
+		*/
 	else
-		close()
-	return
+		user.visible_message("<span class='notice'>\The [src] [density ? "open" : "close"]s for \the [user].</span>",\
+		"\The [src] [density ? "open" : "close"]s.",\
+		"You hear a beep, and a door opening.")
+		// Accountability!
+		if(!users_to_open)
+			users_to_open = list()
+		users_to_open += users_name
+	var/needs_to_close = 0
+	if(density)
+		if(alarmed)
+			needs_to_close = 1
+		spawn()
+			open()
+	else
+		spawn()
+			close()
+	log_admin("[key_name(user)] [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at ([x],[y],[z])")
+
+	if(needs_to_close)
+		spawn(50)
+			if(alarmed && !density)
+				close()
+
+/obj/machinery/door/firedoor/attack_ai(mob/user)
+	if(isobserver(user) || user.stat)
+		return
+	spawn()
+		var/area/A = get_area_master(src)
+		ASSERT(istype(A)) // This worries me.
+		var/alarmed = A.doors_down || A.fire
+		var/old_density = src.density
+		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock safeties and open \the [src]?",,"Yes","No") == "Yes")
+			open()
+		else if(!old_density)
+			close()
+		else
+			return
+		log_admin("[key_name(user)] [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at ([x],[y],[z])")
+		message_admins("[key_name_admin(user)](<A HREF='?_src_=holder;adminplayerobservefollow=\ref[user]'>FLW</A>) [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+
+/obj/machinery/door/firedoor/attack_hand(mob/user as mob)
+	return attackby(null, user)
+
 
 /obj/machinery/door/firedoor/do_animate(animation)
 	switch(animation)
