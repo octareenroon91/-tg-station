@@ -80,7 +80,8 @@
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
-		src.client.screen = null
+		src.client.screen = list()
+		client.screen += client.void
 	..()
 
 /mob/living/simple_animal/updatehealth()
@@ -280,7 +281,7 @@
 			visible_message("<span class='danger'>[M] [response_harm] [src]!</span>")
 			playsound(loc, "punch", 25, 1, -1)
 			adjustBruteLoss(harm_intent_damage)
-			add_logs(M, src, "attacked", admin=0)
+			add_logs(M, src, "attacked", admin=1)
 			updatehealth()
 	return
 
@@ -302,7 +303,7 @@
 		visible_message("<span class='danger'>[M] has slashed at [src]!</span>", \
 				"<span class='userdanger'>[M] has slashed at [src]!</span>")
 		playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
-		add_logs(M, src, "attacked", admin=0)
+		add_logs(M, src, "attacked", admin=1)
 		attack_threshold_check(damage)
 	return
 

@@ -694,8 +694,6 @@
 			hasjetpack = 1
 	var/grav = has_gravity(H)
 
-	if(!grav && !hasjetpack)
-		mspeed += 1 //Slower space without jetpack
 
 	var/health_deficiency = (100 - H.health + H.staminaloss)
 	if(health_deficiency >= 40)
@@ -728,6 +726,8 @@
 	if(H.status_flags & GOTTAGOREALLYFAST)
 		mspeed -= 2
 
+	if(!grav)
+		mspeed = -1 - hasjetpack
 
 	return mspeed
 
@@ -1400,6 +1400,9 @@
 			else
 				H.adjustBruteLoss( LOW_PRESSURE_DAMAGE )
 				H.throw_alert("pressure","lowpressure",2)
+
+	if(environment.toxins > MOLES_PLASMA_VISIBLE)
+		H.pl_effects()
 
 //////////
 // FIRE //

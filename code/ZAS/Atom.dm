@@ -37,7 +37,8 @@ atom/movable/var/pressure_resistance = 5
 
 /atom/proc/air_update_turf(command)
 	var/turf/T = get_turf(src)
-	T.air_update_turf(command)
+	if(T)
+		T.air_update_turf(command)
 
 /turf/air_update_turf(command)
 	if(!SSair)

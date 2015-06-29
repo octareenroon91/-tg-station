@@ -72,7 +72,9 @@ mob/living/carbon/human/airflow_stun()
 	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))	return 0
 	if(buckled) return 0
 	if(shoes)
-		if(shoes.flags & NOSLIP) return 0
+		if(shoes.flags & NOSLIP)
+			src << "<span class='notice'>You stay upright as the air rushes past you.</span>"
+			return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
 		src << "<span class='notice'>You stay upright as the air rushes past you.</span>"
 		return 0
@@ -284,7 +286,7 @@ proc/AirflowSpace(zone/A)
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
 				break
-			if(!isturf(loc))
+			if (!isturf(loc) || istype(loc, /turf/space))
 				break
 			step_towards(src, src.airflow_dest)
 //			if(ismob(src) && src:client)
@@ -329,9 +331,9 @@ proc/AirflowSpace(zone/A)
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
-				return
-			if (!isturf(loc))
-				return
+				break
+			if (!isturf(loc) || istype(loc, /turf/space))
+				break
 			step_towards(src, src.airflow_dest)
 //			if(ismob(src) && src:client)
 //				var/mob/M = src
@@ -394,7 +396,7 @@ mob/airflow_hit(atom/A)
 obj/airflow_hit(atom/A)
 //	if(!sound_override)
 	for(var/mob/M in hearers(src))
-		M.show_message("<span class='danger'>\The [src] slams into \a [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
+//		M.show_message("<span class='danger'>\The [src] slams into \a [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	. = ..()
 
