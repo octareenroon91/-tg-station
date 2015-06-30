@@ -72,7 +72,7 @@ mob/living/carbon/human/airflow_stun()
 	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))	return 0
 	if(buckled) return 0
 	if(shoes)
-		if(shoes.flags & NOSLIP)
+		if(shoes.flags & PRESSUREPROTECT)
 			src << "<span class='notice'>You stay upright as the air rushes past you.</span>"
 			return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
@@ -267,6 +267,7 @@ proc/AirflowSpace(zone/A)
 	if(!density)
 		density = 1
 		od = 1
+	var/spaceticks = 0
 	spawn(0)
 		while(airflow_speed > 0)
 			airflow_speed = min(airflow_speed,15)
@@ -286,8 +287,12 @@ proc/AirflowSpace(zone/A)
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
 				break
-			if (!isturf(loc) || istype(loc, /turf/space))
+			if (!isturf(loc))
 				break
+			if (spaceticks > 1)
+				break
+			if (istype(loc, /turf/space))
+				spaceticks++
 			step_towards(src, src.airflow_dest)
 //			if(ismob(src) && src:client)
 //				var/mob/M = src
@@ -319,6 +324,7 @@ proc/AirflowSpace(zone/A)
 	if(!density)
 		density = 1
 		od = 1
+	var/spaceticks = 0
 	spawn(0)
 		while(airflow_speed > 0)
 			airflow_speed = min(airflow_speed,15)
@@ -332,8 +338,12 @@ proc/AirflowSpace(zone/A)
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
 				break
-			if (!isturf(loc) || istype(loc, /turf/space))
+			if (!isturf(loc))
 				break
+			if (spaceticks > 1)
+				break
+			if (istype(loc, /turf/space))
+				spaceticks++
 			step_towards(src, src.airflow_dest)
 //			if(ismob(src) && src:client)
 //				var/mob/M = src
@@ -353,7 +363,7 @@ proc/AirflowSpace(zone/A)
 
 /mob/living/carbon/human/RepelAirflowDest(n)
 	if(src.shoes)
-		if(src.shoes.flags & NOSLIP)
+		if(src.shoes.flags & PRESSUREPROTECT)
 			return
 	..()
 
@@ -367,7 +377,7 @@ proc/AirflowSpace(zone/A)
 
 /mob/living/carbon/human/GotoAirflowDest(n)
 	if(src.shoes)
-		if(src.shoes.flags & NOSLIP)
+		if(src.shoes.flags & PRESSUREPROTECT)
 			return
 	..()
 
@@ -421,8 +431,8 @@ mob/living/carbon/human/airflow_hit(atom/A)
 	blocked = run_armor_check("chest","melee")
 	apply_damage(b_loss/3, BRUTE, "chest", blocked, 0)
 
-	blocked = run_armor_check("groin","melee")
-	apply_damage(b_loss/3, BRUTE, "groin", blocked, 0)
+//	blocked = run_armor_check("groin","melee")
+//	apply_damage(b_loss/3, BRUTE, "groin", blocked, 0)
 
 	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
 		if(airflow_speed > 10)

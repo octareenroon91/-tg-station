@@ -511,3 +511,10 @@
 		return
 	else
 		..()
+
+
+/mob/living/simple_animal/airflow_stun()
+	return
+
+/mob/living/simple_animal/airflow_hit(atom/A)
+	return

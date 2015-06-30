@@ -88,6 +88,31 @@ turf/c_airblock(turf/other)
 	return result
 
 
+turf/proc/get_blockers(turf/other)
+	#ifdef ZASDBG
+	ASSERT(isturf(other))
+	#endif
+	if(blocks_air)
+		return src
+	if(other.blocks_air)
+		return other
+
+	//Z-level handling code. Always block if there isn't an open space.
+	#ifdef ZLEVELS
+	if(other.z != src.z)
+		if(other.z < src.z)
+			if(!istype(src, /turf/simulated/floor/open)) return src
+		else
+			if(!istype(other, /turf/simulated/floor/open)) return other
+	#endif
+	var/list/blockers = list()
+	for(var/atom/movable/M in contents)
+		if(M.c_airblock(other))
+			blockers |= M
+	return blockers
+
+
+
 
 /atom/movable/proc/atmos_spawn_air(var/text, var/amount) //because a lot of people loves to copy paste awful code lets just make a easy proc to spawn your plasma fires
 	var/turf/simulated/T = get_turf(src)

@@ -171,6 +171,7 @@ Attach to transfer valve and open. BOOM.
 
 	//and the volatile stuff from the air
 	var/datum/gas/volatile_fuel/fuel = locate() in air_contents.trace_gases
+	var/datum/gas/sleeping_agent/oxidizer = locate() in air_contents.trace_gases
 
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
@@ -181,6 +182,9 @@ Attach to transfer valve and open. BOOM.
 	if(fuel)
 		if(fuel.moles < 0.1)
 			air_contents.trace_gases.Remove(fuel)
+	if(oxidizer)
+		if(oxidizer.moles < 0.1)
+			air_contents.trace_gases.Remove(oxidizer)
 
 	// Check if there is something to combust.
 	if (!air_contents.check_recombustability(S))
@@ -221,13 +225,12 @@ Attach to transfer valve and open. BOOM.
 
 	//spread
 	for(var/direction in cardinal)
-		var/turf/simulated/enemy_tile = get_step(S, direction)
-		for(var/atom/A in enemy_tile)
-			A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
-
+		var/turf/simulated/enemy_tile = get_step(S, direction) //Burn stuff in bordering tiles too
+		var/obj/machinery/door/firedoor/F = locate() in enemy_tile
+		if(!istype(F))//But not if a firelock protects them
+			for(var/atom/ignizzle in enemy_tile)
+				ignizzle.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
 		if(S.open_directions & direction) //Grab all valid bordering tiles
-
-
 			if(istype(enemy_tile))
 				var/datum/gas_mixture/acs = enemy_tile.return_air()
 
@@ -259,6 +262,8 @@ Attach to transfer valve and open. BOOM.
 
 		//merge the air back
 		S.assume_air(flow)
+	else
+		Extinguish()
 
 ///////////////////////////////// FLOW HAS BEEN REMERGED /// feel free to delete the fire again from here on //////////////////////////////////////////////////////////////////
 
@@ -289,12 +294,19 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	if((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
 		var/total_fuel = 0
 		var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
+		var/datum/gas/sleeping_agent/oxidizer = locate() in trace_gases
+		var/oxidants = 0
 
 		total_fuel += toxins
 
 		if(fuel)
 		//Volatile Fuel
 			total_fuel += fuel.moles
+		if(oxidizer)
+		//Volatile Fuel
+			oxidants += oxidizer.moles
+		oxidants += oxygen
+
 
 		var/can_use_turf = (T && istype(T))
 		if(can_use_turf)
@@ -314,19 +326,19 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/starting_energy = temperature * heat_capacity()
 
 		//determine the amount of oxygen used
-		var/total_oxygen = min(oxygen, 2 * total_fuel)
+		var/total_oxidants = min(oxidants, 2 * total_fuel)
 
 		//determine the amount of fuel actually used
-		var/used_fuel_ratio = min(oxygen / 2 , total_fuel) / total_fuel
+		var/used_fuel_ratio = min(oxidants / 2 , total_fuel) / total_fuel
 		total_fuel = total_fuel * used_fuel_ratio
 
-		var/total_reactants = total_fuel + total_oxygen
+		var/total_reactants = total_fuel + total_oxidants
 
 		//determine the amount of reactants actually reacting
 		var/used_reactants_ratio = Clamp(total_reactants * firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), 0.2, total_reactants) / total_reactants
 
 		//remove and add gasses as calculated
-		oxygen -= min(oxygen, total_oxygen * used_reactants_ratio )
+		oxygen -= min(oxygen, oxygen * used_reactants_ratio )
 
 		toxins -= min(toxins, (toxins * used_fuel_ratio * used_reactants_ratio ) * 3)
 		if(toxins < 0)
@@ -337,6 +349,9 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		if(fuel)
 			fuel.moles -= (fuel.moles * used_fuel_ratio * used_reactants_ratio) * 5 //Fuel burns 5 times as quick
 			if(fuel.moles <= 0) del fuel
+		if(oxidizer)
+			oxidizer.moles -= min(oxidizer.moles, oxidizer.moles * used_reactants_ratio * 2) //N2O burns 2 times as quick
+			if(oxidizer.moles <= 0) del oxidizer
 
 		if(can_use_turf)
 			if(T.getFireFuel()>0)
@@ -356,8 +371,9 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	//this is a copy proc to continue a fire after its been started.
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
+	var/datum/gas/sleeping_agent/oxidizer = locate() in trace_gases
 
-	if(oxygen && (toxins || fuel))
+	if((oxygen || oxidizer) && (toxins || fuel))
 		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
 			return 1
 		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
@@ -376,7 +392,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	var/still_burning=0
 	for(var/atom/A in T)
 		if(!A) continue
-		if(!oxygen/* || A.autoignition_temperature > temperature*/)
+		if(!oxygen && !oxidizer/* || A.autoignition_temperature > temperature*/)
 			A.extinguish()
 			continue
 //		if(!A.autoignition_temperature)
@@ -399,8 +415,9 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	*/
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
+	var/datum/gas/sleeping_agent/oxidizer = locate() in trace_gases
 
-	if(oxygen && (toxins || fuel))
+	if((oxygen || oxidizer) && (toxins || fuel))
 		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
 			return 1
 		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
@@ -408,7 +425,7 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 
 	if(objects && istype(T))
 		for(var/atom/A in T)
-			if(!A || !oxygen || A.autoignition_temperature > temperature) continue
+			if(!A || !(oxygen || oxidizer) || A.autoignition_temperature > temperature) continue
 			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
 				return 1
 
@@ -418,8 +435,13 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	//Calculates the firelevel based on one equation instead of having to do this multiple times in different areas.
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
+	var/datum/gas/sleeping_agent/oxidizer = locate() in trace_gases
 	var/total_fuel = 0
 	var/firelevel = 0
+	var/oxidants = 0
+	oxidants += oxygen
+	if(oxidizer)
+		oxidants += oxidizer.moles
 
 	if(check_recombustability(T))
 
@@ -435,14 +457,14 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 		if(fuel)
 			total_fuel += fuel.moles
 
-		var/total_combustables = (total_fuel + oxygen)
+		var/total_combustables = (total_fuel + oxidants)
 
 		if(total_fuel > 0 && oxygen > 0)
 
 			//slows down the burning when the concentration of the reactants is low
 			var/dampening_multiplier = total_combustables / (total_combustables + nitrogen + carbon_dioxide)
 			//calculates how close the mixture of the reactants is to the optimum
-			var/mix_multiplier = 1 / (1 + (5 * ((oxygen / total_combustables) ** 2))) // Thanks, Mloc
+			var/mix_multiplier = 1 / (1 + (5 * ((oxidants / total_combustables) ** 2))) // Thanks, Mloc
 			//toss everything together
 			firelevel = zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * mix_multiplier * dampening_multiplier
 
