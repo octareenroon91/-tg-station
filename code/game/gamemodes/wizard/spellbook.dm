@@ -399,7 +399,7 @@
 	var/list/datum/spellbook_entry/entries = list()
 	var/list/categories = list()
 
-/obj/item/weapon/spellbook/New()
+/obj/item/weapon/spellbook/proc/Initialize()
 	..()
 	var/entry_types = typesof(/datum/spellbook_entry) - /datum/spellbook_entry - /datum/spellbook_entry/item - /datum/spellbook_entry/summon
 	for(var/T in entry_types)
@@ -411,6 +411,12 @@
 			del(E)
 	tab = categories[1]
 
+/obj/item/weapon/spellbook/New()
+	..()
+	Initialize()
+
+/obj/item/weapon/spellbook/oneuse/Initialize()  //No need for init in oneuse spellbooks
+	return
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob, params)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))

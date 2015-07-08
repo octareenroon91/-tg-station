@@ -92,6 +92,9 @@
 /mob/living/carbon/proc/update_suit_sensors()
 	var/datum/atom_hud/data/medical/basic/B = huds[DATA_HUD_MEDICAL_BASIC]
 	B.update_suit_sensors(src)
+	var/turf/T = get_turf(src)
+	if (T)
+		crewmonitor.queueUpdate(T.z)
 
 //called when a carbon changes health
 /mob/living/carbon/proc/med_hud_set_health()
@@ -100,6 +103,10 @@
 		holder.icon_state = "hudhealth-100"
 	else
 		holder.icon_state = "hud[RoundHealth(health)]"
+
+	var/turf/T = get_turf(src)
+	if (T)
+		crewmonitor.queueUpdate(T.z)
 
 //called when a carbon changes stat, virus or XENO_HOST
 /mob/living/carbon/proc/med_hud_set_status()
@@ -112,6 +119,9 @@
 		holder.icon_state = "hudill"
 	else
 		holder.icon_state = "hudhealthy"
+	var/turf/T = get_turf(src)
+	if (T)
+		crewmonitor.queueUpdate(T.z)
 
 
 /***********************************************
