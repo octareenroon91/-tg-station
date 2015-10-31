@@ -114,12 +114,7 @@
 	// this is the data which will be sent to the ui
 	var/data = list()
 	data["tankPressure"] = round(air_contents.return_pressure() ? air_contents.return_pressure() : 0)
-	if(!distribute_pressure || (distribute_pressure == round(distribute_pressure)))	//If distribution pressure is a whole number
-		data["releasePressure"] = (distribute_pressure ? distribute_pressure : 0)
-		data["releaseDecimal"] = 0
-	else	//NanoUI apparently shits itself when dealing with decimal numbers
-		data["releasePressure"] = round(distribute_pressure)
-		data["releaseDecimal"] = round(10*(distribute_pressure - round(distribute_pressure)), 1)
+	data["releasePressure"] = round(distribute_pressure ? distribute_pressure : 0)
 	data["defaultReleasePressure"] = round(TANK_DEFAULT_RELEASE_PRESSURE)
 	data["maxReleasePressure"] = round(TANK_MAX_RELEASE_PRESSURE)
 	data["valveOpen"] = 0
@@ -154,15 +149,9 @@
 			else if (href_list["dist_p"] == "max")
 				src.distribute_pressure = TANK_MAX_RELEASE_PRESSURE
 			else
-				if(text2num(href_list["dist_p"]) == -100)	//Incredibly ugly implementation, but either nano or text2num doesn't seem to support decimals
-					src.distribute_pressure -= 0.1
-				else if(text2num(href_list["dist_p"]) == 100)
-					src.distribute_pressure += 0.1
-				else
-					var/cp = text2num(href_list["dist_p"])
-					src.distribute_pressure += cp
-					src.distribute_pressure = min(max(round(src.distribute_pressure, 1), 0), 3*ONE_ATMOSPHERE)
-			src.distribute_pressure = min(max(round(src.distribute_pressure, 0.1), 0), 3*ONE_ATMOSPHERE)
+				var/cp = text2num(href_list["dist_p"])
+				src.distribute_pressure += cp
+			src.distribute_pressure = min(max(round(src.distribute_pressure), 0), 3*ONE_ATMOSPHERE)
 		if (href_list["stat"])
 			if(istype(loc,/mob/living/carbon))
 				var/mob/living/carbon/location = loc

@@ -91,9 +91,11 @@
 	if(operating)
 		return
 	src.add_fingerprint(user)
-	
+	if(!src.requiresID())
+		user = null
+
 	if(density && !emagged)
-		if(allowed(user) || src.emergency == 1 || !src.requiresID())
+		if(allowed(user) || src.emergency == 1)
 			open()
 		else
 			flick("door_deny", src)
@@ -129,7 +131,9 @@
 	if(operating || emagged)	return
 	if(!Adjacent(user))
 		user = null
-	if(src.allowed(user) || src.emergency == 1 || !src.requiresID())
+	if(!src.requiresID())
+		user = null
+	if(src.allowed(user) || src.emergency == 1)
 		if(src.density)
 			open()
 		else

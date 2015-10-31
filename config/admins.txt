@@ -14,4 +14,3 @@ Captain Chen = Trial Admin
 Octareenroon91 = Trial Admin
 KSMH = Game Admin
 Zaers = Coder
-Koriath = Host

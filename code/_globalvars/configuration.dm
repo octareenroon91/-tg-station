@@ -2,7 +2,6 @@ var/datum/configuration/config = null
 
 var/host = null
 var/join_motd = null
-var/sec_den = 1
 var/station_name = null
 var/game_version = "/tg/ Station 13"
 var/changelog_hash = ""

@@ -279,10 +279,6 @@
 				set_picture("ai_sal")
 			if("Red Glow")
 				set_picture("ai_hal")
-			if("Flowey")
-				set_picture("ai_flowey")
-			if("Flowey Grin")
-				set_picture("ai_floweygrin")
 
 		return
 
