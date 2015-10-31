@@ -133,16 +133,6 @@
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chawanmushi
 
-/datum/table_recipe/nuffin
-	time = 15
-	name = "Nuffin"
-	reqs = list(
-		/datum/reagent/consumable/sugar = 5,
-		/obj/item/weapon/reagent_containers/food/snacks/pastrybase = 1,
-		/obj/item/weapon/reagent_containers/food/snacks/monkeycube = 1
-	)
-	result = /obj/item/weapon/reagent_containers/food/snacks/dindu
-
 ////////////////////////////////////////////OTHER////////////////////////////////////////////
 
 /datum/table_recipe/hotdog

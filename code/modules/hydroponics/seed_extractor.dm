@@ -121,7 +121,7 @@
 		return
 	else
 		user << "<span class='warning'>You can't extract any seeds from \the [O.name]!</span>"
-/datum/seed_pile
+datum/seed_pile
 	var/name = ""
 	var/lifespan = 0	//Saved stats
 	var/endurance = 0
@@ -131,7 +131,7 @@
 	var/potency = 0
 	var/amount = 0
 
-/datum/seed_pile/New(var/name, var/life, var/endur, var/matur, var/prod, var/yie, var/poten, var/am = 1)
+datum/seed_pile/New(var/name, var/life, var/endur, var/matur, var/prod, var/yie, var/poten, var/am = 1)
 	src.name = name
 	src.lifespan = life
 	src.endurance = endur
@@ -145,7 +145,7 @@
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/seed_extractor/interact(mob/user as mob)
+obj/machinery/seed_extractor/interact(mob/user as mob)
 	if (stat)
 		return 0
 
@@ -165,7 +165,7 @@
 	popup.open()
 	return
 
-/obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
+obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	if(..())
 		return
 	usr.set_machine(src)
@@ -196,7 +196,7 @@
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/seed_extractor/proc/add(var/obj/item/seeds/O as obj)
+obj/machinery/seed_extractor/proc/add(var/obj/item/seeds/O as obj)
 	if(contents.len >= max_seeds)
 		usr << "<span class='notice'>\The [src] is full.</span>"
 		return 0
