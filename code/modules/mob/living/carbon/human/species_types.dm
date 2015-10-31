@@ -456,7 +456,7 @@
 	if((MST && MST.stat == DEAD) || !MST)
 		if(lingseek)
 			return //everything is fine
-		if( H.job != "Mr. Meeseeks" ) // This mob has no business being a meeseeks
+		if( H.job != "Mr. Meeseeks" && H.job != "Lingseek") // This mob has no business being a meeseeks
 			hardset_dna(H, null, null, null, null, /datum/species/human ) // default to human.
 			return // avert lingseeks. get the hell out of here
 		else
