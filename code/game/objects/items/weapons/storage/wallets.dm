@@ -84,6 +84,28 @@
 	else
 		return ..()
 
+/*
+/obj/item/weapon/storage/wallet/attack_self(mob/user) // cycle between any contained IDs.
+	var/newidx = 0
+	var/obj/item/weapon/card/id/new_id = null
+	var/oldidx = 0
+	var/obj/item/weapon/card/id/old_id = front_id
+	var/list/avail_ids = list()
+	
+	for(var/obj/item/weapon/card/id/I in contents)
+		avail_ids |= I
+	
+	if(avail_ids.len)
+		if(old_id)
+			var/i = avail_ids.Find(old_id)
+			oldidx = (i ? i : -1)
+		
+		
+	
+	if(new_id != old_id)
+		refreshID()
+	*/
+
 /obj/item/weapon/storage/wallet/random/New()
 	..()
 	var/item1_type = pick( /obj/item/stack/spacecash/c10,/obj/item/stack/spacecash/c100,/obj/item/stack/spacecash/c1000,/obj/item/stack/spacecash/c20,/obj/item/stack/spacecash/c200,/obj/item/stack/spacecash/c50, /obj/item/stack/spacecash/c500)
