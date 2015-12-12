@@ -867,10 +867,11 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 		if(character.dna)
 			character.dna.real_name = character.real_name
 			if(pref_species != /datum/species/human && config.mutant_races)
-				hardset_dna(character, null, null, null, null, pref_species.type, mutant_color)
+				hardset_dna(character, null, null, null, null, pref_species.type)
 			else
-				hardset_dna(character, null, null, null, null, /datum/species/human, mutant_color)
-			character.update_body_parts()
+				hardset_dna(character, null, null, null, null, /datum/species/human)
+			character.dna.mutant_color = mutant_color
+			character.update_mutcolor()
 
 		character.gender = gender
 		character.age = age
@@ -880,7 +881,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 		character.hair_color = hair_color
 		character.facial_hair_color = facial_hair_color
 
-		character.set_skin_tone(skin_tone)
+		character.skin_tone = skin_tone
 		character.hair_style = hair_style
 		character.facial_hair_style = facial_hair_style
 		character.underwear = underwear

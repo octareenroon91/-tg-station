@@ -25,4 +25,4 @@
 	..(message, shown_name)
 
 /mob/living/carbon/hivecheck()
-	return exists("hivenode")
+	return getorgan(/obj/item/organ/internal/alien/hivenode)

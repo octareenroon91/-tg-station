@@ -111,17 +111,6 @@
 //////////Cybernetic Implants////////////
 /////////////////////////////////////////
 
-/datum/design/cyberimp_eyes
-	name = "Cybernetic eyes"
-	desc = "These cybernetic eyes function as organic eyes do."
-	id = "ci-eyes"
-	req_tech = list("materials" = 6, "programming" = 4, "biotech" = 4)
-	build_type = MECHFAB
-	materials = list(MAT_METAL = 200, MAT_GLASS = 200)
-	construction_time = 75
-	build_path = /obj/item/organ/internal/eyes/cyberimp
-	category = list("Misc")
-
 /datum/design/cyberimp_medical_hud
 	name = "Medical HUD implant"
 	desc = "These cybernetic eyes will display a medical HUD over everything you see. Wiggle eyes to control."
@@ -130,7 +119,7 @@
 	build_type = MECHFAB
 	materials = list(MAT_METAL = 200, MAT_GLASS = 200, MAT_SILVER = 200, MAT_GOLD = 100)
 	construction_time = 75
-	build_path = /obj/item/organ/internal/eyes/cyberimp/hud/medical
+	build_path = /obj/item/organ/internal/cyberimp/eyes/hud/medical
 	category = list("Misc")
 
 /datum/design/cyberimp_security_hud
@@ -141,7 +130,7 @@
 	build_type = MECHFAB
 	materials = list(MAT_METAL = 200, MAT_GLASS = 200, MAT_SILVER = 300, MAT_GOLD = 300)
 	construction_time = 75
-	build_path = /obj/item/organ/internal/eyes/cyberimp/hud/security
+	build_path = /obj/item/organ/internal/cyberimp/eyes/hud/security
 	category = list("Misc")
 
 /datum/design/cyberimp_xray
@@ -152,7 +141,7 @@
 	build_type = MECHFAB
 	materials = list(MAT_METAL = 200, MAT_GLASS = 200, MAT_SILVER = 200, MAT_GOLD = 200, MAT_PLASMA = 200, MAT_URANIUM = 500, MAT_DIAMOND = 1000)
 	construction_time = 75
-	build_path = /obj/item/organ/internal/eyes/cyberimp/xray
+	build_path = /obj/item/organ/internal/cyberimp/eyes/xray
 	category = list("Misc")
 
 /datum/design/cyberimp_thermals
@@ -163,7 +152,7 @@
 	build_type = MECHFAB
 	materials = list(MAT_METAL = 200, MAT_GLASS = 200, MAT_SILVER = 200, MAT_GOLD = 200, MAT_PLASMA = 200, MAT_DIAMOND = 1000)
 	construction_time = 75
-	build_path = /obj/item/organ/internal/eyes/cyberimp/thermals
+	build_path = /obj/item/organ/internal/cyberimp/eyes/thermals
 	category = list("Misc")
 
 /datum/design/cyberimp_antidrop

@@ -35,7 +35,7 @@
 /obj/structure/stool/bed/nest/user_unbuckle_mob(mob/living/user)
 	var/mob/living/M = src.buckled_mob
 	if(M)
-		if(user.get_organ("plasmavessel"))
+		if(user.getorgan(/obj/item/organ/internal/alien/plasmavessel))
 			unbuckle_mob()
 			add_fingerprint(user)
 			return
@@ -60,9 +60,9 @@
 	if ( !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.buckled || istype(user, /mob/living/silicon/pai) )
 		return
 
-	if(M.get_organ("plasmavessel"))
+	if(M.getorgan(/obj/item/organ/internal/alien/plasmavessel))
 		return
-	if(!user.get_organ("plasmavessel"))
+	if(!user.getorgan(/obj/item/organ/internal/alien/plasmavessel))
 		return
 
 	unbuckle_mob()

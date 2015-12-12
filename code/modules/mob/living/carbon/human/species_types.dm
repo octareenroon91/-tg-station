@@ -6,7 +6,7 @@
 	name = "Human"
 	id = "human"
 	roundstart = 1
-	specflags = list(EYECOLOR,HAIR,FACEHAIR,LIPS, MUTCOLORS)
+	specflags = list(EYECOLOR,HAIR,FACEHAIR,LIPS)
 	use_skintones = 1
 
 /datum/species/human/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)

@@ -6,13 +6,9 @@
 		return
 	var/total_burn	= 0
 	var/total_brute	= 0
-	for(var/datum/organ/limb/O in get_limbs())
-		if(O.status & (ORGAN_DESTROYED | ORGAN_NOBLEED))
-			total_brute += O.destroyed_dam
-		else if(O.counts_for_damage())
-			var/obj/item/organ/limb/L = O.organitem
-			total_brute += L.brute_dam
-			total_burn += L.burn_dam
+	for(var/obj/item/organ/limb/O in organs)	//hardcoded to streamline things a bit
+		total_brute	+= O.brute_dam
+		total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
 	//TODO: fix husking
 	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD )
@@ -25,21 +21,14 @@
 //These procs fetch a cumulative total damage from all organs
 /mob/living/carbon/human/getBruteLoss()
 	var/amount = 0
-	for(var/datum/organ/limb/O in get_limbs())
-		if(O.status & (ORGAN_DESTROYED | ORGAN_NOBLEED))
-			amount += O.destroyed_dam //A destroyed limb is basically a severe brute wound, right?
-		else if(O.exists() && O.counts_for_damage())
-			var/obj/item/organ/limb/L = O.organitem
-			amount += L.brute_dam
-		//Else the organ is either ORGAN_REMOVED or something weird happened.
+	for(var/obj/item/organ/limb/O in organs)
+		amount += O.brute_dam
 	return amount
 
 /mob/living/carbon/human/getFireLoss()
 	var/amount = 0
-	for(var/datum/organ/limb/O in get_limbs())
-		if(O.exists() && O.counts_for_damage()) //A limb only counts for burns if it's actually there.
-			var/obj/item/organ/limb/L = O.organitem
-			amount += L.burn_dam
+	for(var/obj/item/organ/limb/O in organs)
+		amount += O.burn_dam
 	return amount
 
 
@@ -70,21 +59,17 @@
 //Returns a list of damaged organs
 /mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn)
 	var/list/obj/item/organ/limb/parts = list()
-	for(var/datum/organ/limb/O in get_limbs())
-		if(O.counts_for_damage())
-			var/obj/item/organ/limb/L = O.organitem
-			if((brute && L.brute_dam) || (burn && L.burn_dam))
-				parts += L
+	for(var/obj/item/organ/limb/O in organs)
+		if((brute && O.brute_dam) || (burn && O.burn_dam))
+			parts += O
 	return parts
 
 //Returns a list of damageable organs
 /mob/living/carbon/human/proc/get_damageable_organs()
 	var/list/obj/item/organ/limb/parts = list()
-	for(var/datum/organ/limb/O in get_limbs())
-		if(O.counts_for_damage())
-			var/obj/item/organ/limb/L = O.organitem
-			if(L.brute_dam + L.burn_dam < L.max_damage)
-				parts += L
+	for(var/obj/item/organ/limb/O in organs)
+		if(O.brute_dam + O.burn_dam < O.max_damage)
+			parts += O
 	return parts
 
 //Heals ONE external organ, organ gets randomly selected from damaged ones.
@@ -162,6 +147,15 @@
 
 ////////////////////////////////////////////
 
+
+/mob/living/carbon/human/proc/get_organ(var/zone)
+	if(!zone)	zone = "chest"
+	for(var/obj/item/organ/limb/O in organs)
+		if(O.name == zone)
+			return O
+	return null
+
+
 /mob/living/carbon/human/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0)
 	if(dna)	// if you have a species, it will run the apply_damage code there instead
 		dna.species.apply_damage(damage, damagetype, def_zone, blocked, src)
@@ -175,12 +169,12 @@
 			if(blocked <= 0)	return 0
 
 			var/obj/item/organ/limb/organ = null
-			if(!def_zone)
-				def_zone = ran_zone(def_zone)
-			def_zone = check_zone(def_zone)
-			organ = get_organ(def_zone)
-			if(!organ)
-				return 0
+			if(islimb(def_zone))
+				organ = def_zone
+			else
+				if(!def_zone)	def_zone = ran_zone(def_zone)
+				organ = get_organ(check_zone(def_zone))
+			if(!organ)	return 0
 
 			damage = (damage * blocked)
 

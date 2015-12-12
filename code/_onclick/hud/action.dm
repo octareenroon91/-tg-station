@@ -258,10 +258,8 @@
 /datum/action/organ_action/CheckRemoval(mob/living/carbon/user)
 	if(!iscarbon(user))
 		return 1
-	if(isinternalorgan(target))
-		var/obj/item/organ/internal/ORG = target
-		if(ORG.organdatum == user.get_organ(ORG.hardpoint))
-			return 0
+	if(target in user.internal_organs)
+		return 0
 	return 1
 
 /datum/action/organ_action/IsAvailable()

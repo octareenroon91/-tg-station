@@ -32,9 +32,8 @@
 			if(energyKatana in C.stomach_contents)
 				C.stomach_contents -= energyKatana
 
-			var/datum/organ/cavity/CAV = C.get_organ("cavity")
-			if(CAV && energyKatana == CAV.organitem)
-				CAV.dismember(ORGAN_REMOVED)
+			if(energyKatana in C.internal_organs)
+				C.internal_organs -= energyKatana
 
 		energyKatana.loc = get_turf(energyKatana)
 

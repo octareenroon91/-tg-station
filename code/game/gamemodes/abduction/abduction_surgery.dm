@@ -9,30 +9,30 @@
 		return 0
 	var/mob/living/carbon/human/H = user
 	if(H.dna && istype(H.dna.species, /datum/species/abductor))
-		return ..()
+		return 1
 	if((locate(/obj/item/weapon/implant/abductor) in H))
-		return ..()
+		return 1
 	return 0
 
 /datum/surgery_step/extract_organ
 	name = "remove heart"
 	accept_hand = 1
 	time = 32
-	var/datum/organ/internal/IC = null
-	var/list/organ_types = list("heart")
+	var/obj/item/organ/internal/IC = null
+	var/list/organ_types = list(/obj/item/organ/internal/heart)
 
 /datum/surgery_step/extract_organ/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	for(var/organname in organ_types)
-		IC = target.get_organ(organname)
-		if(target.exists(organname))
+	for(var/obj/item/I in target.internal_organs)
+		if(I.type in organ_types)
+			IC = I
 			break
 	user.visible_message("<span class='notice'>[user] starts to remove [target]'s organs.</span>")
 
 /datum/surgery_step/extract_organ/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	if(IC && IC.exists())
+	if(IC)
 		user.visible_message("<span class='notice'>[user] pulls [IC] out of [target]'s [target_zone]!</span>")
-		IC.dismember(ORGAN_REMOVED, special = 1)
 		user.put_in_hands(IC)
+		IC.Remove(target, special = 1)
 		return 1
 	else
 		user.visible_message("<span class='notice'>[user] doesn't find anything in [target]'s [target_zone].</span>")
@@ -40,7 +40,7 @@
 
 /datum/surgery_step/gland_insert
 	name = "insert gland"
-	implements = list(/obj/item/organ/internal/heart/gland = 100)
+	implements = list(/obj/item/organ/internal/gland = 100)
 	time = 32
 
 /datum/surgery_step/gland_insert/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -48,9 +48,9 @@
 
 /datum/surgery_step/gland_insert/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	user.visible_message("<span class ='notice'>[user] inserts [tool] into [target].</span>")
-	var/obj/item/organ/internal/heart/gland/G = tool
 	user.drop_item()
-	G.Insert(target, 2)
+	var/obj/item/organ/internal/gland/gland = tool
+	gland.Insert(target, 2)
 	return 1
 
 

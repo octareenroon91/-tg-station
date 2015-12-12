@@ -128,7 +128,6 @@
 	if(pressure < 50)
 		name = "full strength kinetic force"
 		damage *= 2
-		dismember_class = new /datum/dismember_class/low/
 	..()
 
 /obj/item/projectile/kinetic/Range()
@@ -234,8 +233,6 @@
 	damage = 5
 	range = 1
 
-	dismember_class = new/datum/dismember_class/low/
-
 /obj/item/projectile/plasma/New()
 	var/turf/proj_turf = get_turf(src)
 	if(!istype(proj_turf, /turf))
@@ -246,7 +243,6 @@
 		name = "full strength plasma blast"
 		damage *= 3
 		range += 3
-		dismember_class = new/datum/dismember_class/medium/
 	..()
 
 /obj/item/projectile/plasma/on_hit(var/atom/target)

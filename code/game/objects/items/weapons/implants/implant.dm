@@ -1,5 +1,3 @@
-//Todo: make these fukken organs
-
 /obj/item/weapon/implant
 	name = "implant"
 	icon = 'icons/obj/implants.dmi'

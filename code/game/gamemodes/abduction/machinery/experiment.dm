@@ -140,8 +140,8 @@
 	if(H.stat == DEAD)
 		say("Specimen deceased - please provide fresh sample.")
 		return "<span class='bad'>Specimen Deceased</span>"
-	var/datum/organ/internal/heart/HE = H.get_organ("heart")
-	if(!istype(HE.organitem, /obj/item/organ/internal/heart/gland))
+	var/obj/item/organ/internal/gland/GlandTest = locate() in H.internal_organs
+	if(!GlandTest)
 		say("Experimental dissection not detected!")
 		return "<span class='bad'>No glands detected!</span>"
 	if(H.mind != null && H.ckey != null)
@@ -167,12 +167,9 @@
 			H << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 			obj_count++
 
-		var/datum/organ/internal/heart/heart = H.get_organ("heart")
-		if(heart && heart.exists())
-			if(istype(heart.organitem, /obj/item/organ/internal/heart/gland))
-				var/obj/item/organ/internal/heart/gland/G = heart.organitem
-				G.Start()
-				point_reward++
+		for(var/obj/item/organ/internal/gland/G in H.internal_organs)
+			G.Start()
+			point_reward++
 		if(point_reward > 0)
 			open_machine()
 			SendBack(H)

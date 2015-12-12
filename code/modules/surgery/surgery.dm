@@ -12,13 +12,10 @@
 	var/obj/item/organ/organ									//Operable body part
 
 
-//Generally speaking, you can't operate on non-existing organs
-/datum/surgery/proc/can_start(mob/user, mob/living/carbon/target, datum/organ/organdata = null)
+/datum/surgery/proc/can_start(mob/user, mob/living/carbon/target)
 	// if 0 surgery wont show up in list
 	// put special restrictions here
-	if(organdata.exists())
-		return 1
-	else return 0
+	return 1
 
 
 /datum/surgery/proc/next_step(mob/user, mob/living/carbon/target)
@@ -43,7 +40,8 @@
 //INFO
 //Check /mob/living/carbon/attackby for how surgery progresses, and also /mob/living/carbon/attack_hand.
 //As of Feb 21 2013 they are in code/modules/mob/living/carbon/carbon.dm, lines 459 and 51 respectively.
-//Other important variables are var/list/surgeries (/mob/living) and var/organsystem (/mob/living/carbon)
+//Other important variables are var/list/surgeries (/mob/living) and var/list/internal_organs (/mob/living/carbon)
+// var/list/organs (/mob/living/carbon/human) is the LIMBS of a Mob.
 //Surgical procedures are initiated by attempt_initiate_surgery(), which is called by surgical drapes and bedsheets.
 // /code/modules/surgery/multiple_location_example.dm contains steps to setup a multiple location operation.
 

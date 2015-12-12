@@ -5,10 +5,16 @@
 
 	//first implants & organs
 	var/list/implants = list()
+	var/list/int_organs = list()
 
 	if (tr_flags & TR_KEEPIMPLANTS)
 		for(var/obj/item/weapon/implant/W in src)
 			implants += W
+
+	if (tr_flags & TR_KEEPORGANS)
+		for(var/obj/item/organ/internal/I in internal_organs)
+			int_organs += I
+			I.Remove(src, 1)
 
 	//now the rest
 	if (tr_flags & TR_KEEPITEMS)
@@ -47,16 +53,11 @@
 		O.name = newname
 		O.real_name = newname
 
-	if(organsystem && tr_flags & TR_KEEPORGANS)	//Moving the organsystem
-		O.organsystem = organsystem
-		O.organsystem.set_dna(dna)
-
 	//handle DNA and other attributes
 	if(dna)
 		dna.transfer_identity(O)
 		if(tr_flags & TR_KEEPSE)
-			//O.dna.struc_enzymes = dna.struc_enzymes
-			hardset_dna(O, null, dna.struc_enzymes)
+			O.dna.struc_enzymes = dna.struc_enzymes
 
 	if(suiciding)
 		O.suiciding = suiciding
@@ -83,6 +84,14 @@
 	for(var/obj/item/weapon/implant/I in implants)
 		I.loc = O
 		I.implanted = O
+
+	//re-add organs to new mob
+	if(tr_flags & TR_KEEPORGANS)
+		for(var/obj/item/organ/internal/I in O.internal_organs)
+			qdel(I)
+
+		for(var/obj/item/organ/internal/I in int_organs)
+			I.Insert(O, 1)
 
 	//transfer mind and delete old mob
 	transfer_borer(O)
@@ -113,10 +122,16 @@
 
 	//first implants & organs
 	var/list/implants = list()
+	var/list/int_organs = list()
 
 	if (tr_flags & TR_KEEPIMPLANTS)
 		for(var/obj/item/weapon/implant/W in src)
 			implants += W
+
+	if (tr_flags & TR_KEEPORGANS)
+		for(var/obj/item/organ/internal/I in internal_organs)
+			int_organs += I
+			I.Remove(src, 1)
 
 	//now the rest
 	if (tr_flags & TR_KEEPITEMS)
@@ -179,10 +194,6 @@
 
 	O.loc = loc
 
-	if(organsystem && tr_flags & TR_KEEPORGANS)	//Moving the organsystem
-		O.organsystem = organsystem
-		O.organsystem.set_dna(O.dna)
-
 	//keep viruses?
 	if (tr_flags & TR_KEEPVIRUS)
 		O.viruses = viruses
@@ -205,6 +216,13 @@
 		I.loc = O
 		I.implanted = O
 	O.sec_hud_set_implants()
+
+	if(tr_flags & TR_KEEPORGANS)
+		for(var/obj/item/organ/internal/I in O.internal_organs)
+			qdel(I)
+
+		for(var/obj/item/organ/internal/I in int_organs)
+			I.Insert(O, 1)
 
 	transfer_borer(O)
 
@@ -232,7 +250,8 @@
 /mob/living/carbon/human/AIize()
 	if (notransform)
 		return
-	qdel(organsystem)
+	for(var/t in organs)
+		qdel(t)
 
 	return ..()
 
@@ -319,7 +338,8 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	qdel(organsystem)
+	for(var/t in organs)
+		qdel(t)
 
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot( loc )
 
@@ -364,7 +384,8 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	qdel(organsystem)
+	for(var/t in organs)
+		qdel(t)
 
 	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi( loc )
 
@@ -398,7 +419,8 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	qdel(organsystem)	//Until ayy lmaos have an organsystem
+	for(var/t in organs)
+		qdel(t)
 
 	var/alien_caste = pick("Hunter","Sentinel","Drone")
 	var/mob/living/carbon/alien/humanoid/new_xeno
@@ -427,7 +449,8 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	qdel(organsystem)
+	for(var/t in organs)
+		qdel(t)
 
 	var/mob/living/carbon/slime/new_slime
 	if(reproduce)
@@ -473,7 +496,8 @@
 	canmove = 0
 	icon = null
 	invisibility = 101
-	qdel(organsystem)
+	for(var/t in organs)	//this really should not be necessary
+		qdel(t)
 
 	var/mob/living/simple_animal/corgi/new_corgi = new /mob/living/simple_animal/corgi (loc)
 	new_corgi.a_intent = "harm"
@@ -503,7 +527,8 @@
 	icon = null
 	invisibility = 101
 
-	qdel(organsystem)
+	for(var/t in organs)
+		qdel(t)
 
 	var/mob/new_mob = new mobpath(src.loc)
 

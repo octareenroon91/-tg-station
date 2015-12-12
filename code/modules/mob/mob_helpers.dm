@@ -470,8 +470,7 @@ proc/is_special_character(mob/M) // returns 1 for special characters and 2 for h
 				O << sound(ghost_sound)
 
 /proc/item_heal_robotic(var/mob/living/carbon/human/H, var/mob/user, var/brute, var/burn)
-	var/datum/organ/limb/limbdata = H.get_organ(check_zone(user.zone_sel.selecting))
-	var/obj/item/organ/limb/affecting = limbdata.organitem
+	var/obj/item/organ/limb/affecting = H.get_organ(check_zone(user.zone_sel.selecting))
 
 	var/dam //changes repair text based on how much brute/burn was supplied
 
@@ -480,15 +479,15 @@ proc/is_special_character(mob/M) // returns 1 for special characters and 2 for h
 	else
 		dam = 0
 
-	if(affecting.organtype == ORGAN_ROBOTIC)
+	if(affecting.status == ORGAN_ROBOTIC)
 		if(brute > 0 && affecting.brute_dam > 0 || burn > 0 && affecting.burn_dam > 0)
 			affecting.heal_damage(brute,burn,1)
 			H.update_damage_overlays(0)
 			H.updatehealth()
-			user.visible_message("<span class='notice'>[user] has fixed some of the [dam ? "dents on" : "burnt wires in"] [H]'s [affecting]!</span>")
+			user.visible_message("<span class='notice'>[user] has fixed some of the [dam ? "dents on" : "burnt wires in"] [H]'s [affecting.getDisplayName()]!</span>")
 			return
 		else
-			user << "<span class='notice'>[H]'s [affecting] is already in good condition</span>"
+			user << "<span class='notice'>[H]'s [affecting.getDisplayName()] is already in good condition</span>"
 			return
 	else
 		return
@@ -510,18 +509,3 @@ proc/is_special_character(mob/M) // returns 1 for special characters and 2 for h
 	if(!istype(P))
 		return null
 	return P
-
-mob/proc/active_hand_exists()
-	return 1
-
-//Call with invert = 1 to check inactive hand
-/mob/living/carbon/active_hand_exists(var/invert = 0)	//Partially niggered from NT
-	if(organsystem)
-		var/datum/organ/limb/L
-		if(hand && !invert || !hand && invert)
-			L = get_organ("l_arm")
-		else
-			L = get_organ("r_arm")
-		if(!(L && L.exists()))
-			return 0
-	return 1
