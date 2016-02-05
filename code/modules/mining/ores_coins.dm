@@ -49,7 +49,7 @@
 			T.eye_blurry = 100
 			A << "<span class='warning'>The sand hits your eyes blinding you!</span>"
 	var/F=get_turf(src)
-	if(istype(F,/turf/simulated/floor)
+	if(istype(F,/turf/simulated/floor))
 		var/turf/simulated/floor/FD = F
 		FD.dirt += 100 //makes floor dirty
 	qdel(src) //dissipates
