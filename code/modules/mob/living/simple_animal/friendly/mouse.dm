@@ -23,6 +23,8 @@
 	pass_flags = PASSTABLE | PASSGRILLE | PASSMOB
 	mob_size = MOB_SIZE_SMALL
 	var/body_color //brown, gray and white, leave blank for random
+	infected = 1
+	var/bite_chance = 50 //chance that the rat will bite someone that steps on it
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -51,7 +53,15 @@
 			var/mob/M = AM
 			M << "<span class='notice'>\icon[src] Squeek!</span>"
 			playsound(src, 'sound/effects/mousesqueek.ogg', 100, 1)
+			if(prob(bite_chance))
+				M << "<span class='alert'>The [src] bites you!</span>"
+				if(istype(M,/mob/living))
+					var/mob/living/L = M
+					L.adjustBruteLoss(-5)
+				var/datum/disease/D = pick(infections)
+				M.ContractDisease(new D)
 	..()
+
 
 /*
  * Mouse types

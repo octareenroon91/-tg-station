@@ -35,6 +35,16 @@
 	var/radio_filter_out
 	var/radio_filter_in
 
+	//Pest Spawner Vars
+	var/trash_nearby //spawns rats
+	var/blood_nearby //spawns bats
+	var/corpse_nearby //spawns flies
+	var/pest_nearby
+	var/pest_max = 3 //maximum number of pests that can be around a vent. It won't spawn anymore until the one's found are dead/removed
+	var/pest_chance = 20 //probability to spawn a pest. It is multiplied by the ammount of things it found that pertain to that pest
+	var/pest_ticker //var that counts until ticker_max. Only then it tries to spawn a pest
+	var/pest_ticker_max = 500 //minimum number of ticks between the spawning of another pest
+
 /obj/machinery/atmospherics/components/unary/vent_pump/on
 	on = 1
 	icon_state = "vent_out"
@@ -87,6 +97,46 @@
 		icon_state = "vent_in"
 
 /obj/machinery/atmospherics/components/unary/vent_pump/process_atmos()
+
+	//before all else, I'll piggy back the Pest Spawner code
+	pest_ticker ++
+	if(pest_ticker > pest_ticker_max) //ticker activates, let's try to spawn a pest
+		trash_nearby = 0
+		blood_nearby = 0
+		corpse_nearby = 0
+		pest_nearby = 0
+		pest_ticker = 0 //reset the counter
+		for(var/obj/item/trash/T in oview(7, src)) 					 		//find trash
+			trash_nearby++
+		for(var/obj/effect/decal/cleanable/vomit/V in oview(7, src)) 		//find vomit, counts as trash aswell
+			if(!istype(V,/obj/effect/decal/cleanable/vomit/old)) 			//prevents old vomit from counting
+				trash_nearby++
+		for(var/obj/effect/decal/cleanable/blood/B in oview(7, src)) 		//find blood
+			if(!istype(B,/obj/effect/decal/cleanable/blood/old)) 			//prevents crusty blood from counting
+				blood_nearby ++
+		for(var/obj/effect/decal/cleanable/blood/gibs/G in oview(7, src)) 	//find gibs, they count as blood
+			if(!istype(G,/obj/effect/decal/cleanable/blood/gibs/old)) 		//prevents old gibs from counting
+				blood_nearby ++
+		for(var/mob/M in oview(7, src)) 							 //find corpses && pests
+			if(istype(M,/mob/living/simple_animal/mouse) || istype(M,/mob/living/simple_animal/hostile/retaliate/bat) || istype(M,/mob/living/simple_animal/hostile/poison/bees/flies))
+				if(!M.stat) //dead pests don't count
+					pest_nearby ++
+			if(M.stat == 2) //they count as corpses, though, alongside any other corpses
+				corpse_nearby ++
+
+		//now it spawns the pests. 3 rolls, one for each diferent pest. Chance gets higher the more trash/blood/corpses it finds.
+		//If it finds none, prob is still 0 so it doesn't happen.
+		if(pest_nearby < pest_max)
+			if(prob(pest_chance*trash_nearby))
+				new/mob/living/simple_animal/mouse(get_turf(src))
+				visible_message("<span class='alert'>A mouse crawls from the vent!</span>", "You hear something squeeking.")
+			if(prob(pest_chance*blood_nearby))
+				new/mob/living/simple_animal/hostile/retaliate/bat(get_turf(src))
+				visible_message("<span class='alert'>A bat flies out of the vent!</span>", "You hear something flapping.")
+			if(prob(pest_chance*corpse_nearby))
+				new/mob/living/simple_animal/hostile/poison/bees/flies(get_turf(src))
+				visible_message("<span class='alert'>A swarm of flies comes from the vent!</span>", "You hear something buzzing.")
+
 	..()
 	if(stat & (NOPOWER|BROKEN))
 		return
