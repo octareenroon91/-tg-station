@@ -58,6 +58,7 @@
 
 /obj/machinery/atmospherics/components/unary/vent_pump/New()
 	..()
+	pest_ticker = rand(0,pest_ticker_max) //this way, vents trigger at diferent times, and don't try to spawn pests ALL at the same time. Should prevent that milli-second hang up when they do.
 	initial_loc = get_area(loc)
 	area_uid = initial_loc.uid
 	if (!id_tag)
