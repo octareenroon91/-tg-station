@@ -78,6 +78,7 @@
 
 /mob/living/simple_animal/New()
 	..()
+	infection_ticker = rand(0,infection_ticker_max) //prevents pests from all triggering the spread code at the same time. Only real use would be for a large ammount of map-placed mobs, since the other technically already randomize this depending on when they were created.
 	verbs -= /mob/verb/observe
 	if(!real_name)
 		real_name = name
