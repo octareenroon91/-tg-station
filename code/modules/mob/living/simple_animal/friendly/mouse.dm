@@ -24,7 +24,7 @@
 	mob_size = MOB_SIZE_SMALL
 	var/body_color //brown, gray and white, leave blank for random
 	infected = 1
-	var/bite_chance = 50 //chance that the rat will bite someone that steps on it
+	var/bite_chance = 50 //chance that the rat will bite someone that steps on it. One tenth of this is also the chance it will chew a wire.
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -62,6 +62,21 @@
 				M.ContractDisease(new D)
 	..()
 
+/mob/living/simple_animal/mouse/handle_automated_action()
+	if(prob(bite_chance/10))
+		var/turf/simulated/floor/F = get_turf(src)
+		if(istype(F) && !F.intact)
+			var/obj/structure/cable/C = locate() in F
+			if(C && prob(15))
+				if(C.avail())
+					visible_message("<span class='warning'>[src] chews through the [C]. It's toast!</span>")
+					playsound(src, 'sound/effects/sparks2.ogg', 100, 1)
+					C.Deconstruct()
+					new /obj/item/weapon/reagent_containers/food/snacks/burger/rat(src.loc)
+					qdel(src) //it's a bit silly, but we don't sprites for fried rats aparently. Shame. Still, it's ghetto food.
+				else
+					C.Deconstruct()
+					visible_message("<span class='warning'>[src] chews through the [C].</span>")
 
 /*
  * Mouse types
