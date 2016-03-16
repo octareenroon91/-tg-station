@@ -49,3 +49,11 @@
 /obj/item/weapon/implanter/storage/New()
 	imp = new /obj/item/weapon/implant/storage(src)
 	..()
+
+/obj/item/weapon/implantcase/storage
+	name = "implant case - 'Storage'"
+	desc = "A glass case containing a storage implant."
+
+/obj/item/weapon/implantcase/storage/New()
+	imp = new /obj/item/weapon/implant/storage(src)
+	..()
