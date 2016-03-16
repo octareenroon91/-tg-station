@@ -141,16 +141,6 @@
 	build_path = /obj/item/weapon/implantcase/loyalty
 	category = list("Medical Designs")
 
-/datum/design/implant_storage
-	name = "Storage Implant Case"
-	desc = "A glass case containing an implant."
-	id = "implant_storage"
-	req_tech = list("materials" = 7, "biotech" = 5, "bluespace" = 6, "syndicate" = 4)
-	build_type = PROTOLATHE
-	materials = list(MAT_METAL = 50, MAT_GLASS = 500, MAT_GOLD = 500, MAT_URANIUM = 100, MAT_DIAMOND = 200)
-	build_path = /obj/item/weapon/implantcase/storage
-	category = list("Medical Designs")
-
 /datum/design/implant_adrenalin
 	name = "Adrenalin Implant Case"
 	desc = "A glass case containing an implant."
