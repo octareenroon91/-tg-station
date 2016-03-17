@@ -405,16 +405,16 @@
 		pest_ticker = 0 //reset the counter
 		for(var/obj/item/trash/T in oview(7, src)) 					 		//find trash
 			trash_nearby++
-		for(var/obj/effect/decal/cleanable/vomit/V in oview(7, src)) 		//find vomit, counts as trash aswell
+		for(var/obj/effect/decal/cleanable/vomit/V in orange(6, src)) 		//find vomit, counts as trash aswell
 			if(!istype(V,/obj/effect/decal/cleanable/vomit/old)) 			//prevents old vomit from counting
 				trash_nearby++
-		for(var/obj/effect/decal/cleanable/blood/B in oview(7, src)) 		//find blood
+		for(var/obj/effect/decal/cleanable/blood/B in orange(6, src)) 		//find blood
 			if(!istype(B,/obj/effect/decal/cleanable/blood/old)) 			//prevents crusty blood from counting
 				blood_nearby ++
-		for(var/obj/effect/decal/cleanable/blood/gibs/G in oview(7, src)) 	//find gibs, they count as blood
+		for(var/obj/effect/decal/cleanable/blood/gibs/G in orange(6, src)) 	//find gibs, they count as blood
 			if(!istype(G,/obj/effect/decal/cleanable/blood/gibs/old)) 		//prevents old gibs from counting
 				blood_nearby ++
-		for(var/mob/M in oview(7, src)) 							 //find corpses && pests
+		for(var/mob/M in orange(6, src)) 							 //find corpses && pests
 			if(istype(M,/mob/living/simple_animal/mouse) || istype(M,/mob/living/simple_animal/hostile/retaliate/bat) || istype(M,/mob/living/simple_animal/hostile/poison/bees/flies))
 				if(!M.stat) //dead pests don't count
 					pest_nearby ++
