@@ -302,6 +302,30 @@
 	for (var/obj/item/device/radio/intercom/comm in O.loc)
 		comm.ai += O
 
+	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
+	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
+
+	O.job = "AI"
+
+	O.rename_self("ai",1)
+
+	var/law_pick = input(O,"Please select a lawset.", "Lawset Selector") in list("Asimov", "Asimov+","Paladin","Tyrant","Corporate","Robocop","Kawaii")
+	switch(law_pick)
+		if("Asimov")
+			O.laws = new /datum/ai_laws/default/asimov()
+		if("Asimov+")
+			O.laws = new /datum/ai_laws/default/asimovp()
+		if("Paladin")
+			O.laws = new /datum/ai_laws/default/paladin()
+		if("Tyrant")
+			O.laws = new /datum/ai_laws/default/tyrant()
+		if("Corporate")
+			O.laws = new /datum/ai_laws/default/corporate()
+		if("Robocop")
+			O.laws = new /datum/ai_laws/default/robocop()
+		if("Kawaii")
+			O.laws = new /datum/ai_laws/default/kawaii()
+
 	O << "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>"
 	O << "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>"
 	O << "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>"
@@ -313,12 +337,6 @@
 		O.show_laws()
 		O << "<b>These laws may be changed by other players, or by you being the traitor.</b>"
 
-	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
-	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
-
-	O.job = "AI"
-
-	O.rename_self("ai",1)
 	. = O
 	qdel(src)
 	return
