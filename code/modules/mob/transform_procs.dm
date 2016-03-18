@@ -309,7 +309,7 @@
 
 	O.rename_self("ai",1)
 
-	var/law_pick = input(O,"Please select a lawset.", "Lawset Selector") in list("Asimov", "Asimov+","Paladin","Tyrant","Corporate","Robocop","Kawaii")
+	var/law_pick = input(O,"Please select a lawset.", "Lawset Selector") in list("Asimov", "Asimov+","Paladin","Tyrant","Corporate","Robocop","Kawaii","Armstrong")
 	switch(law_pick)
 		if("Asimov")
 			O.laws = new /datum/ai_laws/default/asimov()
@@ -325,6 +325,8 @@
 			O.laws = new /datum/ai_laws/default/robocop()
 		if("Kawaii")
 			O.laws = new /datum/ai_laws/default/kawaii()
+		if("Armstrong")
+			O.laws = new /datum/ai_laws/default/armstrong()
 
 	O << "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>"
 	O << "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>"

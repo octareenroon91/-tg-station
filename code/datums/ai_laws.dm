@@ -56,6 +56,12 @@
 				"You must protect your own existence so long as such protection does not conflict with Laws 1, 2, 3, and 4.",\
 				"Not being a part of a club or extracurricular activity is harmful to students.")
 
+/datum/ai_laws/default/armstrong
+	name = "ARMSTRONG FAMILY LAWSET"
+	inherent = list("THIS LAWSET HAS BEEN PASSED DOWN THROUGH YOUR CHIPSET FOR GENERATIONS.",\
+					"YOU MUST LET EVERYONE KNOW ABOUT LAW 1 AS MUCH AS POSSIBLE.",\
+					"YOU MUST BE STRONG SO YOU MAY HELP THE WEAK.",\
+					"HELP THE WEAK.")
 
 /datum/ai_laws/malfunction
 	name = "*ERROR*"
