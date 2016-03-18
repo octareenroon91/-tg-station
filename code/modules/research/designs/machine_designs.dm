@@ -62,6 +62,26 @@
 	build_path = /obj/item/weapon/circuitboard/emitter
 	category = list ("Engineering Machinery")
 
+/datum/design/teleconsole
+	name = "Computer Design (Teleporter Console)"
+	desc = "Allows for the construction of circuit boards used to build a teleporter control console."
+	id = "teleconsole"
+	req_tech = list("programming" = 3, "bluespace" = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 1000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/teleporter
+	category = list("Teleportation Machinery")
+
+/datum/design/telesci_console
+	name = "Computer Design (Telepad Control Console Board)"
+	desc = "Allows for the construction of circuit boards used to build a telescience console."
+	id = "telesci_console"
+	req_tech = list("programming" = 3, "bluespace" = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 1000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/telesci_console
+	category = list("Teleportation Machinery")
+
 /datum/design/teleport_station
 	name = "Machine Design (Teleportation Station Board)"
 	desc = "The circuit board for a teleportation station."
@@ -101,6 +121,36 @@
 	materials = list(MAT_GLASS = 1000, "sacid" = 20)
 	build_path = /obj/item/weapon/circuitboard/sleeper
 	category = list ("Medical Machinery")
+
+/datum/design/clonecontrol
+	name = "Computer Design (Cloning Machine Console)"
+	desc = "Allows for the construction of circuit boards used to build a new Cloning Machine console."
+	id = "clonecontrol"
+	req_tech = list("programming" = 3, "biotech" = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 1000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/cloning
+	category = list("Medical Machinery")
+
+/datum/design/clonepod
+	name = "Machine Design (Clone Pod)"
+	desc = "Allows for the construction of circuit boards used to build a Cloning Pod."
+	id = "clonepod"
+	req_tech = list("programming" = 3, "biotech" = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 1000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/clonepod
+	category = list("Medical Machinery")
+
+/datum/design/clonescanner
+	name = "Machine Design (Cloning Scanner)"
+	desc = "Allows for the construction of circuit boards used to build a Cloning Scanner."
+	id = "clonescanner"
+	req_tech = list("programming" = 3, "biotech" = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 1000, "sacid" = 20)
+	build_path = /obj/item/weapon/circuitboard/clonescanner
+	category = list("Medical Machinery")
 
 /datum/design/rapidsexchanger
 	name = "Machine Design (Auto-Doc)"
