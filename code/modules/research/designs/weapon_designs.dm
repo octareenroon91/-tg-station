@@ -18,7 +18,7 @@
 	id = "pin_loyalty"
 	req_tech = list("combat" = 5, "materials" = 5, "powerstorage" = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_SILVER = 600, MAT_DIAMOND = 600, MAT_URANIUM = 200)
+	materials = list(MAT_METAL = 2000, MAT_GLASS = 1000)
 	build_path = /obj/item/device/firing_pin/implant/loyalty
 	category = list("Firing Pins")
 
