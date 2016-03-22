@@ -737,7 +737,7 @@ Sorry Giacom. Please don't be mad :(
 
 /mob/living/proc/Exhaust()
 	src << "<span class='notice'>You're too exhausted to keep going...</span>"
-	Weaken(5)
+	AdjustWeakened(min(max(staminaloss -100,100),30))	//keeping weaken values between 100 or 30 on Exhaust() otherwise disablers only floor people for 5 ticks. Ridiculous.
 
 /mob/living/update_gravity(has_gravity)
 	if(!ticker)
