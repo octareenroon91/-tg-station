@@ -4,6 +4,20 @@ var/const/INGEST = 2 //injection, ingestion
 var/const/VAPOR = 3 //smoke, foam, spray, blob attack
 var/const/PATCH = 4 //patches
 
+/datum/reagents/proc/has_reagent_type(type, amount = -1)
+	for(var/_reagent in reagent_list)
+		var/datum/reagent/R = _reagent
+		if (istype(R, type))
+			if(!amount)
+				return R
+			else
+				if(R.volume >= amount)
+					return R
+				else
+					return 0
+
+	return 0
+
 
 /datum/reagents
 	var/list/datum/reagent/reagent_list = new/list()
