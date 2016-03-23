@@ -1,5 +1,5 @@
 /**********************Mineral deposits**************************/
-/datum/controller/game_controller
+/datum/controller/master
 	var/list/artifact_spawning_turfs = list()
 
 /turf/simulated/mineral //wall piece

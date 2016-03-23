@@ -75,7 +75,7 @@ Here it is: Buttbot.
 	if(prob(buttchance) && !findtext(message,"butt") && (sincelastfart + 10 < world.timeofday))
 		message = strip_html(html_decode(raw_message))
 
-		var/list/split_phrase = text2list(message," ") //Split it up into words.
+		var/list/split_phrase = splittext(message," ") //Split it up into words.
 
 		var/list/prepared_words = split_phrase.Copy()
 		var/i = rand(1,3)
@@ -89,7 +89,7 @@ Here it is: Buttbot.
 
 			split_phrase[index] = pick("slurp","meta","cuck","filtered","proprietary","white wash","cancer")
 
-		say(list2text(split_phrase," ")) //say() already sanitizes
+		say(jointext(split_phrase," ")) //say() already sanitizes
 		sincelastfart = world.timeofday
 	return
 

@@ -6,23 +6,8 @@
 	return
 
 /datum/hud/proc/brain_hud(ui_style = 'icons/mob/screen_midnight.dmi')
-	mymob.blind = new /obj/screen()
-	mymob.blind.icon = 'icons/mob/screen_full.dmi'
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = " "
-	mymob.blind.screen_loc = "CENTER-7,CENTER-7"
-	mymob.blind.layer = 0
-
-	mymob.cover = new /obj/screen()
-	mymob.cover.icon = 'icons/mob/screen_full.dmi'
-	mymob.cover.icon_state = "coveredimageoverlay"
-	mymob.cover.name = " "
-	mymob.cover.screen_loc = "CENTER-7,CENTER-7"
-	mymob.blind.mouse_opacity = 0
-	mymob.cover.layer = 0
 
 	mymob.client.screen = null
-	mymob.client.screen += list(mymob.blind, mymob.cover)
 
 /datum/hud/proc/blob_hud(ui_style = 'icons/mob/screen_midnight.dmi')
 
