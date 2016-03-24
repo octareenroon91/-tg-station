@@ -868,6 +868,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 			character.dna.real_name = character.real_name
 			if(pref_species != /datum/species/human && config.mutant_races)
 				hardset_dna(character, null, null, null, null, pref_species.type, mutant_color)
+				real_name = random_name_mutant(character.dna.species.id)	//to create random names for mutants
 			else
 				hardset_dna(character, null, null, null, null, /datum/species/human, mutant_color)
 			character.update_body_parts()
