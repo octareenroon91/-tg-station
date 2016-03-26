@@ -79,14 +79,15 @@
 	desc = "A possessed suit of armor driven by the will of the restless dead."
 	icon_state = "behemoth"
 	icon_living = "behemoth"
-	maxHealth = 250
+	maxHealth = 320 // Buffed max health but not starting health, good sinergy with artificer
 	health = 250
 	response_harm   = "harmlessly punches"
 	harm_intent_damage = 0
 	melee_damage_lower = 30
-	melee_damage_upper = 30
+	melee_damage_upper = 40  // Slightly buff to max damage, if you get hit by this slowass guy you deserve it
 	attacktext = "smashes their armored gauntlet into"
 	speed = 3
+	see_in_dark = 7 // why the fuck couldn't he see in dark before?
 	environment_smash = 2
 	attack_sound = 'sound/weapons/punch3.ogg'
 	status_flags = 0
@@ -94,14 +95,14 @@
 	force_threshold = 11
 	construct_spells = list(/obj/effect/proc_holder/spell/aoe_turf/conjure/lesserforcewall)
 	playstyle_string = "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, \
-						create shield walls and even deflect energy weapons, and rip apart enemies and walls alike.</B>"
+						create shield walls and even deflect energy weapons, and rip apart enemies and walls alike.You do not start with your HP maxed, seek an artificer to get you to full health</B>" // now reflects the health changes
 
 /mob/living/simple_animal/construct/armored/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam))
-		var/reflectchance = 80 - round(P.damage/3)
+		var/reflectchance = 90 // big chance to reflect energy weapons, making them the tank they should be.
 		if(prob(reflectchance))
 			if(P.damage_type == BURN || P.damage_type == BRUTE)
-				adjustBruteLoss(P.damage * 0.5)
+				adjustBruteLoss(P.damage * 0.25) // small damage taken if the weapon gets deflected
 			visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s shell!</span>", \
 							"<span class='userdanger'>The [P.name] gets reflected by [src]'s shell!</span>")
 
