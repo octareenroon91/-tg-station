@@ -639,6 +639,27 @@
 	else
 		beenhit += 1
 	return
+	
+/obj/machinery/power/apc/attack_alien(simple_animal/construct/wraith) // Wraiths can now slash at APCs
+	if(!user)
+		return
+	user.changeNext_move(CLICK_CD_MELEE)
+	user.do_attack_animation(src)
+	user.visible_message("<span class='danger'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
+	playsound(src.loc, 'sound/weapons/slash.ogg', 100, 1)
+
+	if(beenhit >= pick(3, 4) && panel_open != 1)
+		panel_open = 1
+		update_icon()
+		visible_message("<span class='danger'>The [src.name]'s cover flies open, exposing the wires!</span>")
+
+	else if(panel_open == 1 && !wires.is_all_cut())
+		wires.cut_all()
+		update_icon()
+		visible_message("<span class='danger'>The [src.name]'s wires are shredded!</span>")
+	else
+		beenhit += 1
+	return
 
 
 /obj/machinery/power/apc/interact(mob/user)
