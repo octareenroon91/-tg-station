@@ -10,7 +10,7 @@
  *		Plant Bag
  *		Sheet Snatcher
  *		Book Bag
- *
+ *		Slime Bag(new)
  *	-Sayu
  */
 
@@ -285,6 +285,22 @@
 	max_w_class = 3
 	w_class = 4 //Bigger than a book because physics
 	can_hold = list(/obj/item/weapon/book, /obj/item/weapon/storage/book, /obj/item/weapon/spellbook)
+	
+// -----------------------------
+//           Slime Bag
+// -----------------------------
+/obj/item/weapon/storage/bag/bio
+	name = "slime bag"
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "slimebag"
+	desc = "A bag for the safe transportation of slime extracts and the means to activate them.."
+	storage_slots = 25
+	max_combined_w_class = 200
+	w_class = 1
+	preposition = "in"
+	can_hold = list(/obj/item/slime_extract, /obj/item/weapon/reagent_containers/syringe)
+
+
 
 /*
  * Trays - Agouri
