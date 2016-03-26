@@ -224,7 +224,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 								"U.",
 								"V.",
 								"W.",
-								"Q.",
+								"X.",
 								"Y.",
 								"Z.")
 		generated_name += " "
