@@ -148,8 +148,8 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 	var/attempts = 10
 	for(var/i=1, i<=attempts, i++)
 		//first word, should be a verb
-		generated_name = pick("Runs",
-								"Hisses",
+		generated_name = pick("Runs-With",
+								"Hisses-At",
 								"Chases",
 								"Hunts",
 								"Wags",
@@ -157,11 +157,11 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 								"Brews",
 								"Scratches",
 								"Slithers",
-								"Plays,"
+								"Plays-With",
 								"Awakes",
 								"Burns",
 								"Rolls",
-								"lifts")
+								"Lifts")
 		generated_name += "-"
 		//second word
 		generated_name += pick("My",
@@ -367,6 +367,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 	for(var/i=1, i<=attempts, i++)
 		generated_name = pick("Julius",
 								"Brutus",
+								"Biggus",
 								"Atticus",
 								"Cassius",
 								"Lucius",
@@ -399,6 +400,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 								"Caudinus",
 								"Cincinnatus",
 								"Drusus",
+								"Dickus",
 								"Gallaecus",
 								"Globulus",
 								"Helenus",
@@ -484,8 +486,9 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 	var/generated_name
 	var/attempts = 10
 	for(var/i=1, i<=attempts, i++)
-		generated_name = pick("Daa",
+		generated_name = pick("Ayy",
 								"Kaa",
+								"Daa",
 								"Maa",
 								"Raa",
 								"Saa",
@@ -494,18 +497,20 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 								"Mee",
 								"Ree",
 								"See")
-		generated_name += pick("'lo",
+		generated_name += pick("'lam",
 								"'mo",
+								"'lo",
 								"'no",
 								"'bo",
-								"'do",
+								"'dos",
 								"'fo",
-								"'go",
-								"'ro",
+								"'gor",
+								"'rol",
 								"'vo",
 								"'zo")
-		generated_name += pick("dok",
+		generated_name += pick("ao",
 								"las",
+								"dok",
 								"gan",
 								"nok",
 								"vel")
