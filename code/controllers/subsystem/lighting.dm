@@ -37,9 +37,10 @@ var/datum/subsystem/lighting/SSlighting
 //All queue lists prune themselves, which will cause lights with no luminosity to be garbage collected (cheaper and safer
 //than deleting them).
 //By using queues we are ensuring we don't perform more updates than are necessary
-/datum/subsystem/lighting/fire()
+/datum/subsystem/lighting/fire(resumed = 0)
+	if(!resumed)
+		lights_workload = MC_AVERAGE(lights_workload, lighting_update_lights.len)
 
-	lights_workload = MC_AVERAGE(lights_workload, lighting_update_lights.len)
 	for(var/datum/light_source/L in lighting_update_lights)
 		if(L.needs_update)
 			if(L.destroyed || L.check() || L.force_update)

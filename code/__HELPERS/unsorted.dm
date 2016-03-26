@@ -4,6 +4,21 @@
  * A large number of misc global procs.
  */
 
+//Key thing that stops lag. Cornerstone of performance in ss13
+/proc/stoplag()
+	. = 1
+	sleep(world.tick_lag)
+#if DM_VERSION >= 510
+	if (world.tick_usage > TICK_LIMIT_TO_RUN) //woke up, still not enough tick, sleep for more.
+		. += 2
+		sleep(world.tick_lag*2)
+		if (world.tick_usage > TICK_LIMIT_TO_RUN) //woke up, STILL not enough tick, sleep for more.
+			. += 4
+			sleep(world.tick_lag*4)
+			//you might be thinking of adding more steps to this, or making it use a loop and a counter var
+			//	not worth it.
+#endif
+
 //Inverts the colour of an HTML string
 /proc/invertHTML(HTMLstring)
 
@@ -1512,11 +1527,11 @@ proc/find_holder_of_type(var/atom/reference,var/typepath) //Returns the first ob
 
 
 /proc/screen_loc2turf(scr_loc, turf/origin)
-	var/tX = text2list(scr_loc, ",")
-	var/tY = text2list(tX[2], ":")
+	var/tX = splittext(scr_loc, ",")
+	var/tY = splittext(tX[2], ":")
 	var/tZ = origin.z
 	tY = tY[1]
-	tX = text2list(tX[1], ":")
+	tX = splittext(tX[1], ":")
 	tX = tX[1]
 	tX = max(1, min(world.maxx, origin.x + (text2num(tX) - (world.view + 1))))
 	tY = max(1, min(world.maxy, origin.y + (text2num(tY) - (world.view + 1))))

@@ -594,7 +594,7 @@
 	specflags = list(NOBREATH,COLDRES,NOBLOOD,RADIMMUNE)
 
 /datum/species/zombie/handle_speech(message)
-	var/list/message_list = text2list(message, " ")
+	var/list/message_list = splittext(message, " ")
 	var/maxchanges = max(round(message_list.len / 1.5), 2)
 
 	for(var/i = rand(maxchanges / 2, maxchanges), i > 0, i--)
@@ -607,7 +607,7 @@
 		if(prob(20) && message_list.len > 3)
 			message_list.Insert(insertpos, "[pick("BRAINS", "Brains", "Braaaiinnnsss", "BRAAAIIINNSSS")]...")
 
-	return list2text(message_list, " ")
+	return jointext(message_list, " ")
 
 /datum/species/abductor
 	name = "Abductor"

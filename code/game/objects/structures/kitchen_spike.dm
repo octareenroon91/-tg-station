@@ -95,7 +95,7 @@
 				meat = 5
 				skin = 1
 
-				var/list/affecting_path = text2list("[allowed_type]", "/")		//we want a specific part of the type path for this: the last part of the path in allowed_types
+				var/list/affecting_path = splittext("[allowed_type]", "/")		//we want a specific part of the type path for this: the last part of the path in allowed_types
 				var/affecting_type = affecting_path[affecting_path.len]			//ex. 1 if affecting.type is /mob/living/carbon/monkey, this will set affecting_type to "monkey"
 																				//ex. 2 if affecting.type is /mob/living/carbon/alien/humanoid/queen, this will set affecting_type to "alien"
 

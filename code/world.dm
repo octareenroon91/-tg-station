@@ -62,7 +62,7 @@
 
 
 	spawn(-1)
-		master_controller.setup()
+		Master.Setup()
 
 	process_teleport_locs()			//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()	//Sets up ghost teleport locations.
@@ -253,7 +253,7 @@
 		features += "hosted by <b>[config.hostedby]</b>"
 
 	if (features)
-		s += ": [list2text(features, ", ")]"
+		s += ": [splittext(features, ", ")]"
 
 	/* does this help? I do not know */
 	if (src.status != s)

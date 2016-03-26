@@ -1,3 +1,4 @@
+
 ###############################################################################################
 # Basically, ckey goes first. Rank goes after the "="                                         #
 # Case is not important for ckey.                                                             #
