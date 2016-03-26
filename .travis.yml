@@ -4,8 +4,8 @@ sudo: false
 
 env:
     global:
-    - BYOND_MAJOR="509"
-    - BYOND_MINOR="1310"
+    - BYOND_MAJOR="510"
+    - BYOND_MINOR="1333"
     matrix:
     - DM_MAPFILE="metastation"
     - DM_MAPFILE="ministation"
