@@ -648,7 +648,7 @@
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	color = "#DB5008" // rgb: 219, 80, 8
 	toxpwr = 1
-	var/acidpwr = 30 //the amount of protection removed from the armour
+	var/acidpwr = 10 //the amount of protection removed from the armour
 
 /datum/reagent/toxin/acid/reaction_mob(var/mob/living/carbon/C, var/method=TOUCH, var/reac_volume)
 	if(!istype(C))
@@ -683,7 +683,7 @@
 	description = "Fluorosulfuric acid is a an extremely corrosive chemical substance."
 	color = "#8E18A9" // rgb: 142, 24, 169
 	toxpwr = 2
-	acidpwr = 80
+	acidpwr = 20
 
 /datum/reagent/toxin/acid/polyacid
 	name = "Polytrinic acid"
@@ -693,7 +693,7 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	color = "#8E18A9" // rgb: 142, 24, 169
 	toxpwr = 2
-	acidpwr = 80
+	acidpwr = 20
 
 
 /datum/reagent/toxin/impedrezene
