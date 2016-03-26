@@ -40,6 +40,21 @@
 	points = 1
 	refined_type = /obj/item/stack/sheet/glass
 
+/obj/item/weapon/ore/glass/throw_impact(A)  //to make eye blurring possible with throwing sand.
+	if(istype(A,/mob/living/carbon/human))  //we can add a conditional later to check if the "thrower" is targeting the eyes, but I felt it was uneeded.
+		var/mob/living/carbon/human/T = A
+		if(T.check_part_covered("eyes"))
+			A << "<span class='warning'>The sand hits your mask!</span>"
+		else
+			T.eye_blurry = 100
+			A << "<span class='warning'>The sand hits your eyes blinding you!</span>"
+	var/F=get_turf(src)
+	if(istype(F,/turf/simulated/floor))
+		var/turf/simulated/floor/FD = F
+		FD.dirt += 100 //makes floor dirty
+	qdel(src) //dissipates
+
+
 /obj/item/weapon/ore/glass/attack_self(mob/living/user as mob)
 	user << "<span class='notice'>You use the sand to make sandstone.</span>"
 	var/sandAmt = 1
