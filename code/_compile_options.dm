@@ -23,12 +23,12 @@
 
 //Don't set this very much higher then 1024 unless you like inviting people in to dos your server with message spam
 #define MAX_MESSAGE_LEN			1024
-#define MAX_NAME_LEN			26
-#define MAX_BROADCAST_LEN		512
+#define MAX_NAME_LEN			30
+#define MAX_BROADCAST_LEN		1024
 
 //MINOR TWEAKS/MISC
-#define AGE_MIN				17	//youngest a character can be
-#define AGE_MAX				85	//oldest a character can be
+#define AGE_MIN				1	//youngest a character can be
+#define AGE_MAX				999	//oldest a character can be
 #define SHOES_SLOWDOWN		0	//How much shoes slow you down by default. Negative values speed you up
 #define POCKET_STRIP_DELAY			40	//time taken (in deciseconds) to search somebody's pockets
 #define DOOR_CRUSH_DAMAGE	10	//the amount of damage that airlocks deal when they crush you
