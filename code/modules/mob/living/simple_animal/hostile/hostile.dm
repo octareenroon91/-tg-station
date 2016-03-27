@@ -219,10 +219,9 @@
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
 	target.attack_animal(src)
-	if(infected_bite && istype(target,/mob) && prob(infection_chance))
-		var/mob/M = target
-		var/datum/disease/D = pick(infections)
-		M.ContractDisease(new D)
+	var/mob/M = target
+	if(infected_bite && istype(target,/mob) && prob(infection_chance) && !M.viruses)	//if the mob already is infected with something, it does not contract a new disease
+		M.ContractDisease(vector)
 	return 1
 
 /mob/living/simple_animal/hostile/proc/Aggro()
