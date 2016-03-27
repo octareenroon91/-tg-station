@@ -99,7 +99,7 @@
 	// Creatures made of leaves and plant matter.
 	name = "Plant"
 	id = "plant"
-//	roundstart = 1	Redundant with podpeople right now
+	roundstart = 1	//for now, they're the default
 	default_color = "59CE00"
 	specflags = list(MUTCOLORS,EYECOLOR)
 	attack_verb = "slice"
@@ -136,19 +136,7 @@
 			H.nutrition = min(H.nutrition+30, NUTRITION_LEVEL_FULL)
 	return
 
-/*
- PODPEOPLE
-*/
-
-/datum/species/plant/pod
-	// A mutation caused by a human being ressurected in a revival pod. These regain health in light, and begin to wither in darkness.
-	//will not be available for roundstart. They are just a step into becoming a plant person.
-	name = "Podperson"
-	id = "pod"
-	specflags = list(MUTCOLORS,EYECOLOR)
-	roundstart = 0
-
-/datum/species/plant/pod/spec_life(mob/living/carbon/human/H)
+/datum/species/plant/spec_life(mob/living/carbon/human/H)
 	var/light_amount = 0 //how much light there is in the place, affects receiving nutrition and healing
 	if(isturf(H.loc)) //else, there's considered to be no light
 		var/turf/T = H.loc
@@ -166,6 +154,19 @@
 
 	if(H.nutrition < NUTRITION_LEVEL_STARVING + 50)
 		H.take_overall_damage(2,0)
+
+/*
+ PODPEOPLE
+*/
+
+/datum/species/plant/pod
+	// A mutation caused by a human being ressurected in a revival pod. These regain health in light, and begin to wither in darkness.
+	//will not be available for roundstart. They are just a step into becoming a plant person.
+	name = "Podperson"
+	id = "pod"
+	specflags = list(MUTCOLORS,EYECOLOR)
+	roundstart = 0
+
 
 /*
  SHADOWPEOPLE
