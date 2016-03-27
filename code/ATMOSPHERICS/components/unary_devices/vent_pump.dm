@@ -41,7 +41,7 @@
 	var/blood_nearby //spawns bats
 	var/corpse_nearby //spawns flies
 	var/pest_nearby
-	var/pest_max = 2 //maximum number of pests that can be around a vent. It won't spawn anymore until the one's found are dead/removed
+	var/pest_max = 1 //maximum number of pests that can be around a vent. It won't spawn anymore until the one's found are dead/removed
 	var/pest_chance = 5 //probability to spawn a pest. It is multiplied by the ammount of things it found that pertain to that pest.
 	var/pest_ticker //var that counts until ticker_max. Only then it tries to spawn a pest
 	var/pest_ticker_max = 800 //minimum number of ticks between the spawning of another pest
