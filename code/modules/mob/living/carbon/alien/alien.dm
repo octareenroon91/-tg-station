@@ -22,6 +22,10 @@
 	type_of_meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno
 	gib_type = /obj/effect/decal/cleanable/blood/gibs/xgibs
 
+
+	var/nightvision = 1
+
+
 	status_flags = CANPARALYSE|CANPUSH
 	var/heat_protection = 0.5
 	var/leaping = 0

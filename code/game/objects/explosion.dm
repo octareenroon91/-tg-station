@@ -82,6 +82,9 @@ proc/trange(var/Dist=0,var/turf/Center=null)//alternative to range (ONLY process
 		var/z0 = epicenter.z
 
 		for(var/turf/T in trange(max_range, epicenter))
+			CHECK_TICK
+			if (!T)
+				continue
 
 			var/dist = cheap_hypotenuse(T.x, T.y, x0, y0)
 

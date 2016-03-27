@@ -583,10 +583,12 @@ Please contact me on #coderbus IRC. ~Carnie x
 		if(client)
 			client.screen += r_hand
 
+		var/t_icon = r_hand.icon
+		if(!t_icon)	t_icon = 'icons/mob/inhands/items_righthand.dmi'
 		var/t_state = r_hand.item_state
 		if(!t_state)	t_state = r_hand.icon_state
 
-		overlays_standing[R_HAND_LAYER] = image("icon" = 'icons/mob/inhands/items_righthand.dmi', "icon_state"="[t_state]", "layer"=-R_HAND_LAYER)
+		overlays_standing[R_HAND_LAYER] = image("icon" = "[t_icon]", "icon_state"="[t_state]", "layer"=-R_HAND_LAYER)
 
 	apply_overlay(R_HAND_LAYER)
 
@@ -610,10 +612,12 @@ Please contact me on #coderbus IRC. ~Carnie x
 		if(client)
 			client.screen += l_hand
 
+		var/t_icon = l_hand.icon
+		if(!t_icon)	t_icon = 'icons/mob/inhands/items_lefthand.dmi'
 		var/t_state = l_hand.item_state
 		if(!t_state)	t_state = l_hand.icon_state
 
-		overlays_standing[L_HAND_LAYER] = image("icon" = 'icons/mob/inhands/items_lefthand.dmi', "icon_state"="[t_state]", "layer"=-L_HAND_LAYER)
+		overlays_standing[L_HAND_LAYER] = image("icon" = "[t_icon]", "icon_state"="[t_state]", "layer"=-L_HAND_LAYER)
 
 	apply_overlay(L_HAND_LAYER)
 

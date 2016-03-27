@@ -192,10 +192,12 @@
 			if(A.lighting_use_dynamic)	light_amount = T.get_lumcount() * 10
 			else						light_amount =  10
 		if(light_amount > 7) //if there's enough light, start dying
-			H.take_overall_damage(1,1)
 			if(!light_message)
 				light_message = 1
-				H << "<span class='warning'>The light burns you!</span>"
+				H << "<span class='warning'>The light is too strong here! Find shelter!</span>"
+			H.take_overall_damage(1,1)
+			H << "<span class='userdanger'>The light burns you!</span>"
+			H << 'sound/weapons/sear.ogg'
 		else
 			if(light_message)
 				light_message = 0
@@ -594,7 +596,7 @@
 	specflags = list(NOBREATH,COLDRES,NOBLOOD,RADIMMUNE)
 
 /datum/species/zombie/handle_speech(message)
-	var/list/message_list = text2list(message, " ")
+	var/list/message_list = splittext(message, " ")
 	var/maxchanges = max(round(message_list.len / 1.5), 2)
 
 	for(var/i = rand(maxchanges / 2, maxchanges), i > 0, i--)
@@ -607,7 +609,7 @@
 		if(prob(20) && message_list.len > 3)
 			message_list.Insert(insertpos, "[pick("BRAINS", "Brains", "Braaaiinnnsss", "BRAAAIIINNSSS")]...")
 
-	return list2text(message_list, " ")
+	return jointext(message_list, " ")
 
 /datum/species/abductor
 	name = "Abductor"

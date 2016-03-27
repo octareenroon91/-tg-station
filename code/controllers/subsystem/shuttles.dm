@@ -24,10 +24,13 @@ var/datum/subsystem/shuttle/SSshuttle
 	var/points_per_decisecond = 0.005	//points gained every decisecond
 	var/points_per_slip = 2				//points gained per slip returned
 	var/points_per_crate = 5			//points gained per crate returned
-	var/points_per_intel = 100			//points gained per intel returned
+	var/points_per_intel = 250			//points gained per intel returned
 	var/points_per_plasma = 5			//points gained per plasma returned
+	var/points_per_design = 25			//points gained per max reliability research design returned (only for initilally unreliable designs)
 	var/centcom_message = ""			//Remarks from Centcom on how well you checked the last order.
-	var/list/discoveredPlants = list()	//Unique typepaths for unusual things we've already sent CentComm, associated with their potencies
+	var/list/discoveredPlants = list()	//Typepaths for unusual plants we've already sent CentComm, associated with their potencies
+	var/list/techLevels = list()
+	var/list/researchDesigns = list()
 	var/list/shoppinglist = list()
 	var/list/requestlist = list()
 	var/list/supply_packs = list()
@@ -248,7 +251,7 @@ var/datum/subsystem/shuttle/SSshuttle
 	reqform.info += "RANK: [orderedbyRank]<br>"
 	reqform.info += "REASON: [comment]<br>"
 	reqform.info += "SUPPLY CRATE TYPE: [object.name]<br>"
-	reqform.info += "ACCESS RESTRICTION: [replacetext(get_access_desc(object.access))]<br>"
+//	reqform.info += "ACCESS RESTRICTION: [replacetext(get_access_desc(object.access))]<br>" dude weed lmao ill fix this later maybe
 	reqform.info += "CONTENTS:<br>"
 	reqform.info += object.manifest
 	reqform.info += "<hr>"

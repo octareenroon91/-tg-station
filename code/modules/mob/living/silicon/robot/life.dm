@@ -215,27 +215,6 @@
 	else
 		throw_alert("charge","nocell")
 
-	client.screen.Remove(global_hud.blurry,global_hud.druggy,global_hud.vimpaired)
-
-	if ((src.blind && src.stat != 2))
-		if(src.eye_blind)
-			src.blind.layer = 18
-		else
-			src.blind.layer = 0
-
-			if(src.eye_covered)
-				src.cover.layer = 17
-			else
-				src.cover.layer = 0
-
-			if (src.disabilities & NEARSIGHT)
-				src.client.screen += global_hud.vimpaired
-
-			if (src.eye_blurry)
-				src.client.screen += global_hud.blurry
-
-			if (src.druggy)
-				src.client.screen += global_hud.druggy
 
 	if (src.stat != 2)
 		if (src.machine)

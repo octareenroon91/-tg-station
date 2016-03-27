@@ -108,6 +108,50 @@
 
 
 /////////////////////////////////////////
+////////////Regular Implants/////////////
+/////////////////////////////////////////
+
+/datum/design/implanter
+	name = "Implanter"
+	desc = "A sterile automatic implant injector."
+	id = "implanter"
+	req_tech = list("materials" = 1, "programming" = 2, "biotech" = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_METAL = 600, MAT_GLASS = 200)
+	build_path = /obj/item/weapon/implanter
+	category = list("Medical Designs")
+
+/datum/design/implantcase
+	name = "Implant Case"
+	desc = "A glass case containing an implant."
+	id = "implantcase"
+	req_tech = list("materials" = 1, "biotech" = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS = 500)
+	build_path = /obj/item/weapon/implantcase
+	category = list("Medical Designs")
+
+/datum/design/implant_loyalty
+	name = "Loyalty Implant Case"
+	desc = "A glass case containing an implant."
+	id = "implant_loyalty"
+	req_tech = list("materials" = 5, "biotech" = 5, "magnets" = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_METAL = 50, MAT_GLASS = 500, "alkysine" = 5, "sprinkles" = 5)
+	build_path = /obj/item/weapon/implantcase/loyalty
+	category = list("Medical Designs")
+
+/datum/design/implant_adrenalin
+	name = "Adrenalin Implant Case"
+	desc = "A glass case containing an implant."
+	id = "implant_adrenalin"
+	req_tech = list("materials" = 7, "biotech" = 5, "combat" = 6, "syndicate" = 6)
+	build_type = PROTOLATHE
+	materials = list(MAT_METAL = 50, MAT_GLASS = 500, MAT_GOLD = 500, MAT_URANIUM = 100, MAT_DIAMOND = 200)
+	build_path = /obj/item/weapon/implantcase/adrenaline
+	category = list("Medical Designs")
+
+/////////////////////////////////////////
 //////////Cybernetic Implants////////////
 /////////////////////////////////////////
 

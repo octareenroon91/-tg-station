@@ -190,17 +190,7 @@
 	if(start)
 		return findtextEx(text, suffix, start, null)
 
-/*
- * Text modification
- */
-// See bygex.dm
-#ifndef USE_BYGEX
-/proc/replacetext(text, find, replacement)
-	return list2text(text2list(text, find), replacement)
 
-/proc/replacetextEx(text, find, replacement)
-	return list2text(text2listEx(text, find), replacement)
-#endif
 
 //Adds 'u' number of zeros ahead of the text 't'
 /proc/add_zero(t, u)
@@ -415,7 +405,7 @@ var/list/binary = list("0","1")
 
 /proc/format_num(var/number, var/sep=",")
 	var/c="" // Current char
-	var/list/parts = text2list("[number]",".")
+	var/list/parts = splittext("[number]",".")
 	var/origtext = "[parts[1]]"
 	var/len      = length(origtext)
 	var/offset   = len % 3

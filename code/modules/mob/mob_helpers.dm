@@ -209,6 +209,7 @@ proc/isovermind(A)
 		p++
 	return sanitize(t)
 
+/* keeping this proc incase its needed for some reason
 proc/slur(n)
 	var/phrase = html_decode(n)
 	var/leng = lentext(phrase)
@@ -232,7 +233,7 @@ proc/slur(n)
 			if(20)	newletter+="[newletter][newletter]"
 		newphrase+="[newletter]";counter-=1
 	return newphrase
-
+*/
 /proc/stutter(n)
 	var/te = html_decode(n)
 	var/t = ""//placed before the message. Not really sure what it's for.

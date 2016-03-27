@@ -1,3 +1,9 @@
+
+/mob/living/silicon/ai/proc/lacks_power()
+	var/turf/T = get_turf(src)
+	var/area/A = get_area(src)
+	return !T || !A || ((!A.power_equip || istype(T, /turf/space)) && !is_type_in_list(src.loc, list(/obj/item, /obj/mecha)))
+
 /mob/living/silicon/ai/Life()
 	if (src.stat == 2)
 		return
@@ -53,9 +59,6 @@
 
 		if (!blindness)
 			//stage = 4.5
-			if(src.blind)
-				if (src.blind.layer != 0)
-					src.blind.layer = 0
 			src.sight |= SEE_TURFS
 			src.sight |= SEE_MOBS
 			src.sight |= SEE_OBJS
@@ -82,16 +85,15 @@
 		else
 
 			//stage = 6
-			src.blind.screen_loc = "1,1 to 15,15"
-			if (src.blind.layer!=18)
-				src.blind.layer = 18
-			src.sight = src.sight&~SEE_TURFS
-			src.sight = src.sight&~SEE_MOBS
-			src.sight = src.sight&~SEE_OBJS
-			src.see_in_dark = 0
-			src.see_invisible = SEE_INVISIBLE_LIVING
+			sight = src.sight&~SEE_TURFS
+			sight = src.sight&~SEE_MOBS
+			sight = src.sight&~SEE_OBJS
+			see_in_dark = 0
+			see_invisible = SEE_INVISIBLE_LIVING
 
-			if (((!loc.power_equip) || istype(T, /turf/space)) && !istype(src.loc,/obj/item))
+			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+
+			if(lacks_power())
 				if (src:aiRestorePowerRoutine==0)
 					src:aiRestorePowerRoutine = 1
 
@@ -109,7 +111,7 @@
 							if (!istype(T, /turf/space))
 								src << "Alert cancelled. Power has been restored without our assistance."
 								src.aiRestorePowerRoutine = 0
-								src.blind.layer = 0
+								clear_fullscreen("blind")
 								return
 						src << "Fault confirmed: missing external power. Shutting down main control system to save power."
 						sleep(20)
@@ -146,7 +148,7 @@
 								if (!istype(T, /turf/space))
 									src << "Alert cancelled. Power has been restored without our assistance."
 									src:aiRestorePowerRoutine = 0
-									src.blind.layer = 0 //This, too, is a fix to issue 603
+									clear_fullscreen("blind")
 									return
 							switch(PRP)
 								if (1) src << "APC located. Optimizing route to APC to avoid needless power waste."
