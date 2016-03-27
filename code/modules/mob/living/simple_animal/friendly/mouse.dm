@@ -58,8 +58,7 @@
 				if(istype(M,/mob/living))
 					var/mob/living/L = M
 					L.adjustBruteLoss(-5)
-				var/datum/disease/D = pick(infections)
-				M.ContractDisease(new D)
+				M.ContractDisease(vector)
 	..()
 
 /mob/living/simple_animal/mouse/handle_automated_action()

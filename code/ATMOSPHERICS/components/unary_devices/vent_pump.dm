@@ -41,10 +41,18 @@
 	var/blood_nearby //spawns bats
 	var/corpse_nearby //spawns flies
 	var/pest_nearby
-	var/pest_max = 3 //maximum number of pests that can be around a vent. It won't spawn anymore until the one's found are dead/removed
-	var/pest_chance = 20 //probability to spawn a pest. It is multiplied by the ammount of things it found that pertain to that pest.
+	var/pest_max = 1 //maximum number of pests that can be around a vent. It won't spawn anymore until the one's found are dead/removed
+	var/pest_chance = 5 //probability to spawn a pest. It is multiplied by the ammount of things it found that pertain to that pest.
 	var/pest_ticker //var that counts until ticker_max. Only then it tries to spawn a pest
-	var/pest_ticker_max = 500 //minimum number of ticks between the spawning of another pest
+	var/pest_ticker_max = 800 //minimum number of ticks between the spawning of another pest
+	var/sanitary_areas = list (/area/medical/surgery,
+								/area/medical/virology,
+								/area/medical/morgue,
+								/area/toxins/xenobiology,
+								/area/crew_quarters/kitchen,
+								/area/security/warden,
+								/area/security/brig,
+								/area/security/hos)
 
 /obj/machinery/atmospherics/components/unary/vent_pump/on
 	on = 1
@@ -61,6 +69,8 @@
 	..()
 	pest_ticker = rand(0,pest_ticker_max) //this way, vents trigger at diferent times, and don't try to spawn pests ALL at the same time. Should prevent that milli-second hang up when they do.
 	initial_loc = get_area(loc)
+	if(is_type_in_list(initial_loc,sanitary_areas))
+		pest_enable = 0	//area is considered sanitary, no pests spawn there.
 	area_uid = initial_loc.uid
 	if (!id_tag)
 		assign_uid()
@@ -403,18 +413,18 @@
 		corpse_nearby = 0
 		pest_nearby = 0
 		pest_ticker = 0 //reset the counter
-		for(var/obj/item/trash/T in oview(7, src)) 					 		//find trash
+		for(var/obj/item/trash/T in view(7, src)) 					 		//find trash
 			trash_nearby++
-		for(var/obj/effect/decal/cleanable/vomit/V in orange(6, src)) 		//find vomit, counts as trash aswell
+		for(var/obj/effect/decal/cleanable/vomit/V in view(6, src)) 		//find vomit, counts as trash aswell
 			if(!istype(V,/obj/effect/decal/cleanable/vomit/old)) 			//prevents old vomit from counting
 				trash_nearby++
-		for(var/obj/effect/decal/cleanable/blood/B in orange(6, src)) 		//find blood
+		for(var/obj/effect/decal/cleanable/blood/B in view(6, src)) 		//find blood
 			if(!istype(B,/obj/effect/decal/cleanable/blood/old)) 			//prevents crusty blood from counting
 				blood_nearby ++
-		for(var/obj/effect/decal/cleanable/blood/gibs/G in orange(6, src)) 	//find gibs, they count as blood
+		for(var/obj/effect/decal/cleanable/blood/gibs/G in view(6, src)) 	//find gibs, they count as blood
 			if(!istype(G,/obj/effect/decal/cleanable/blood/gibs/old)) 		//prevents old gibs from counting
 				blood_nearby ++
-		for(var/mob/M in orange(6, src)) 							 //find corpses && pests
+		for(var/mob/M in view(6, src)) 							 //find corpses && pests
 			if(istype(M,/mob/living/simple_animal/mouse) || istype(M,/mob/living/simple_animal/hostile/retaliate/bat) || istype(M,/mob/living/simple_animal/hostile/poison/bees/flies))
 				if(!M.stat) //dead pests don't count
 					pest_nearby ++
@@ -427,7 +437,7 @@
 			if(prob(pest_chance*trash_nearby))
 				new/mob/living/simple_animal/mouse(get_turf(src))
 				visible_message("<span class='alert'>A mouse crawls from the vent!</span>", "You hear something squeeking.")
-			if(prob(pest_chance*blood_nearby))
+			if(prob(pest_chance*blood_nearby/5))	//divided by 5 because unlike blood and corpses, blood is generated in large ammounts.
 				new/mob/living/simple_animal/hostile/retaliate/bat(get_turf(src))
 				visible_message("<span class='alert'>A bat flies out of the vent!</span>", "You hear something flapping.")
 			if(prob(pest_chance*corpse_nearby))

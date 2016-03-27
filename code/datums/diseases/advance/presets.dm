@@ -58,3 +58,31 @@
 		name = "Inert Virus"
 		symptoms = list(new/datum/symptom/inert)
 	..(process, D, copy)
+
+//////////////
+//Pest Virus//
+//////////////
+
+/datum/disease/advance/syphillis/New(var/process = 1, var/datum/disease/advance/D, var/copy = 0)
+	if(!D)
+		name = "Syphillis"
+		symptoms = list(new/datum/symptom/itching, new/datum/symptom/dizzy)
+	..(process, D, copy)
+
+/datum/disease/advance/mountain/New(var/process = 1, var/datum/disease/advance/D, var/copy = 0)
+	if(!D)
+		name = "Mountain Syndrome"
+		symptoms = list(new/datum/symptom/beard, new/datum/symptom/weight_gain)
+	..(process, D, copy)
+
+/datum/disease/advance/librarian/New(var/process = 1, var/datum/disease/advance/D, var/copy = 0)
+	if(!D)
+		name = "Librarian Germs"
+		symptoms = list(new/datum/symptom/vitiligo, new/datum/symptom/sneeze)
+	..(process, D, copy)
+
+/datum/disease/advance/drymouth/New(var/process = 1, var/datum/disease/advance/D, var/copy = 0)
+	if(!D)
+		name = "Cotton Mouth"
+		symptoms = list(new/datum/symptom/fever, new/datum/symptom/cough)
+	..(process, D, copy)

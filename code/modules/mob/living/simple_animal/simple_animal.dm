@@ -69,11 +69,12 @@
 
 	var/infected = 0 // if the animal is a "pest" and can make the victims sick passively (tipycally, airborn virus)
 	var/infected_bite = 0 //if the attacks of the animal can infect victims
-	var/infection_chance = 40 //chance to contract a virus when attacked by the pest
-	var/passive_infection_chance = 20  //passive chance of contracting a virus just by being around the animal
+	var/infection_chance = 20 //chance to contract a virus when attacked by the pest
+	var/passive_infection_chance = 5  //passive chance of contracting a virus just by being around the animal
 	var/infections = list(/datum/disease/cold,/datum/disease/anxiety,/datum/disease/pierrot_throat) //infections the animal can spread. Can be overwritten
 	var/infection_ticker
 	var/infection_ticker_max = 50 // how many ticks until it tries to passively infect someone
+	var/datum/disease/vector = null //the disease this animal will try to spread
 
 
 /mob/living/simple_animal/New()
@@ -82,6 +83,7 @@
 	verbs -= /mob/verb/observe
 	if(!real_name)
 		real_name = name
+	vector = pick(infections) //disease to spread
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
@@ -105,7 +107,7 @@
 			if(infection_ticker > infection_ticker_max)
 				infection_ticker = 0
 				for(var/mob/M in oview(7, src))
-					if(prob(passive_infection_chance))
+					if(prob(passive_infection_chance) && !M.viruses)	//if the mob already is infected with something, it does not contract a new disease
 						var/datum/disease/D = pick(infections)
 						M.ContractDisease(new D)
 

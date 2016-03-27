@@ -74,5 +74,5 @@
 	icon_living = "fly"
 	infected = 1
 	infected_bite = 1
-	infection_chance = 60 //slightly more chance, since it's flies, and flies are filthy
-	infections = list(/datum/disease/dna_retrovirus,/datum/disease/brainrot,/datum/disease/appendicitis)
+	infection_chance = 20 //slightly more chance, since it's flies, and flies are filthy
+	infections = list(/datum/disease/cold9,/datum/disease/advance/mountain,/datum/disease/advance/drymouth)

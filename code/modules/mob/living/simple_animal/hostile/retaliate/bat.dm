@@ -26,7 +26,7 @@
 	mob_size = MOB_SIZE_SMALL
 	infected = 1
 	infected_bite = 1
-	infections = list(/datum/disease/magnitis,/datum/disease/fake_gbs,/datum/disease/emphysema)
+	infections = list(/datum/disease/advance/librarian,/datum/disease/fake_gbs,/datum/disease/advance/syphillis)
 
 
 	//Space bats need no air to fly in.
