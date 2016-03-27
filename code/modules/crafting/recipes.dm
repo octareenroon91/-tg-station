@@ -147,3 +147,11 @@
 				/obj/item/stack/sheet/plasteel = 1)
 	tools = list(/obj/item/weapon/weldingtool)
 	time = 100 
+	
+/datum/table_recipe/slimebag
+	name = "slime bag"
+	result = /obj/item/weapon/storage/bag/bio
+	reqs = list(/obj/item/weapon/storage/bag/plants = 1,
+				/obj/item/slime_extract = 1)
+	time = 100			
+		
