@@ -762,7 +762,8 @@ Sorry Giacom. Please don't be mad :(
 /mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, type = /obj/screen/fullscreen/flash)
 	if(check_eye_prot() < intensity && (override_blindness_check || !(disabilities & BLIND)))
 		overlay_fullscreen("flash", type)
-		addtimer(src, "clear_fullscreen", 25, FALSE, "flash", 25)
+		//addtimer(src, "clear_fullscreen", 25, FALSE, "flash", 25) // bad signature clear_fullscreen(FALSE, "flash", 25)
+		addtimer(src, "clear_fullscreen", 25, argList = list("flash", 25) )
 		return 1
 //this returns the mob's protection against eye damage (number between -1 and 2)
 /mob/living/proc/check_eye_prot()
