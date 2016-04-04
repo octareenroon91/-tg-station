@@ -638,7 +638,6 @@
 	..()
 
 
-//ACID
 
 
 /datum/reagent/toxin/acid
@@ -659,6 +658,9 @@
 		return
 
 	C.acid_act(acidpwr, toxpwr, reac_volume)
+
+	if(method == TOUCH)
+		C.apply_damage(acidpwr*volume/200, BURN) //fuck it,
 
 /datum/reagent/toxin/acid/reaction_obj(var/obj/O, var/reac_volume)
 	if(istype(O.loc, /mob)) //handled in human acid_act()
@@ -693,7 +695,7 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	color = "#8E18A9" // rgb: 142, 24, 169
 	toxpwr = 2
-	acidpwr = 20
+	acidpwr = 80
 
 
 /datum/reagent/toxin/impedrezene

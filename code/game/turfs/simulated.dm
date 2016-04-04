@@ -48,7 +48,7 @@
 					M.inertia_dir = 0
 				return
 			if(2) //lube
-				M.slip(0, 4, null, (STEP|SLIDE|GALOSHES_DONT_HELP))
+				M.slip(0, 10, null, (STEP|SLIDE|GALOSHES_DONT_HELP))
 
 /turf/simulated/ChangeTurf(var/path)
 	. = ..()

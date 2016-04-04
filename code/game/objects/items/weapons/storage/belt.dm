@@ -263,3 +263,27 @@
 	name = "yellow fannypack"
 	icon_state = "fannypack_yellow"
 	item_state = "fannypack_yellow"
+
+/obj/item/weapon/storage/backpack/holding/belt //It is here instead of belts so it works with all the BoH code.
+	name = "belt of holding"
+	desc = "An experimental belt that opens into a small, localized pocket of Blue Space. (don't tape two together)"
+	icon_state = "holdingbelt"
+	item_state = "holdingbelt"
+	storage_slots = 14
+	max_w_class = 3 //It is a backpack for your belt!
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/storage/backpack/holding/belt/handle_item_insertion(obj/item/W, prevent_warning = 0, mob/user)
+	if(istype(W, /obj/item/weapon/storage/backpack/holding/belt) && !W.crit_fail)
+		investigate_log("has become a singularity. Caused by [user.key]","singulo")
+		user << "<span class='danger'>The Bluespace interfaces of the two devices catastrophically malfunction!</span>"
+		user << "<span class='danger'><i>You hear a loud voice in your head... <b>I TOLD YOU NOT TO TAPE THEM TOGETHER!</i></b></span>"
+		qdel(W)
+		var/obj/singularity/singulo = new /obj/singularity (get_turf(src))
+		singulo.energy = 300 //should make it a bit bigger~
+		message_admins("[key_name_admin(user)] detonated a belt of holding") //griffers can't smart off to admins about how they detonated a /belt/ of holding not a bag.
+		log_game("[key_name(user)] detonated a belt of holding")
+		qdel(src)
+		singulo.process()
+		return
+	..()

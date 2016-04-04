@@ -28,6 +28,8 @@
 
 	pixel_y=8
 
+	speed_process = 1
+
 /obj/machinery/hydroponics/constructable
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/equipment.dmi'
@@ -126,6 +128,7 @@
 			// Advance age
 			age++
 			needs_update = 1
+			CHECK_TICK
 
 //Nutrients//////////////////////////////////////////////////////////////
 			// Nutrients deplete slowly

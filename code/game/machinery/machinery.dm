@@ -138,17 +138,25 @@ Class Procs:
 	var/closed_panel_decon = 0
 	var/wrench_time = 20
 	var/weld_time = 20
+	var/speed_process = 0
 
 /obj/machinery/New()
 	..()
 	machines += src
-	SSmachine.processing += src
+	if(!speed_process)
+		SSmachine.processing += src
+	else
+		SSfastprocess.processing += src
+
 	power_change()
 	auto_use_power()
 
 /obj/machinery/Destroy()
 	machines.Remove(src)
-	SSmachine.processing -= src
+	if(!speed_process)
+		SSmachine.processing -= src
+	else
+		SSfastprocess.processing -= src
 	if(occupant)
 		dropContents()
 	..()

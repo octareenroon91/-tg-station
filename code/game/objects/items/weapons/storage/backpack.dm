@@ -32,6 +32,7 @@
 	desc = "A backpack that opens into a localized pocket of Blue Space."
 	origin_tech = "bluespace=4"
 	icon_state = "holdingpack"
+	storage_slots = 14 //bag of HOLDING not bag of being able to put bigger items into it
 	max_w_class = 5
 	max_combined_w_class = 35
 

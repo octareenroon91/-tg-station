@@ -5,6 +5,7 @@
 	flags = HEAR
 	hud_possible = list(ANTAG_HUD)
 	var/datum/mind/mind
+	var/unacidable = 0
 
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 

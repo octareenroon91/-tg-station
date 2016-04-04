@@ -479,11 +479,6 @@
 		M.overeatduration += 20 //Eating more than 10u will make you fat, 10u will give 500 overeatduration
 		..()
 
-/datum/reagent/lube/reaction_turf(turf/simulated/T, reac_volume)
-	if (!istype(T)) return
-	if(reac_volume >= 1)
-		T.MakeSlippery(1)
-
 /datum/reagent/consumable/fat/concentrated
 	name = "Concentrated Fat"
 	id = "cfat"
