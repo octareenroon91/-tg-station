@@ -487,24 +487,16 @@
 	metabolization_rate = 1 * REAGENTS_METABOLISM
 	color = "#C8A5DC"
 
-/datum/reagent/consumable/fat/concentrated
-	name = "Concentrated Fat"
-	id = "cfat"
-	description = "You feel fat just from looking at it."
-	nutriment_factor = 10 * REAGENTS_METABOLISM
-	metabolization_rate = 1 * REAGENTS_METABOLISM
-	color = "#C8A5DC"
-
 /datum/reagent/consumable/fat/concentrated/on_mob_life(var/mob/living/M as mob)
 		M.overeatduration += 40 //Eating 5u or more will make you fat, 4.8u will give 500 overeatduration
 		..()
 
-/datum/reagent/fat/concentrated/reaction_turf(turf/simulated/T, reac_volume)
+/datum/reagent/fat/reaction_turf(turf/simulated/T, reac_volume)
 	if (!istype(T)) return
 	if(reac_volume >= 1)
 		T.MakeSlippery(1)
 
-/datum/reagent/cfat/concentrated/reaction_turf(turf/simulated/T, reac_volume)
+/datum/reagent/fat/concentrated/reaction_turf(turf/simulated/T, reac_volume)
 	if (!istype(T)) return
 	if(reac_volume >= 1)
 		T.MakeSlippery(2)
