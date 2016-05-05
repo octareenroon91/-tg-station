@@ -263,3 +263,12 @@
 	name = "yellow fannypack"
 	icon_state = "fannypack_yellow"
 	item_state = "fannypack_yellow"
+
+/obj/item/weapon/storage/backpack/holding/belt //It is here instead of belts so it works with all the BoH code.
+	name = "belt of holding"
+	desc = "An experimental belt that opens into a small, localized pocket of Blue Space. (don't tape two together)"
+	icon_state = "holdingbelt"
+	item_state = "holdingbelt"
+	storage_slots = 14
+	max_w_class = 3 //It is a backpack for your belt!
+	slot_flags = SLOT_BELT

@@ -242,7 +242,7 @@ emp_act
 /mob/living/carbon/human/acid_act(acidpwr, toxpwr, acid_volume)
 	var/list/damaged = list()
 	var/list/inventory_items_to_kill = list()
-	var/acidity = min(acidpwr*acid_volume/200, 5)
+	var/acidity = min(acidpwr*acid_volume/200, 100)
 	var/acid_volume_left = acid_volume
 	var/acid_decay = 100/acidpwr // how much volume we lose per item we try to melt. 5 for poly, 10 for sulphuric
 

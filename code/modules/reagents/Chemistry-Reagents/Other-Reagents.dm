@@ -258,7 +258,8 @@
 /datum/reagent/lube/reaction_turf(turf/simulated/T, reac_volume)
 	if (!istype(T)) return
 	if(reac_volume >= 1)
-		T.MakeSlippery(2)
+		T.MakeSlippery(2) //if you nerf this again I will fucking shoot you in the head with a space lube syringe
+
 
 /datum/reagent/slimetoxin
 	name = "Mutation Toxin"
