@@ -491,12 +491,12 @@
 		M.overeatduration += 40 //Eating 5u or more will make you fat, 4.8u will give 500 overeatduration
 		..()
 
-/datum/reagent/fat/reaction_turf(turf/simulated/T, reac_volume)
+/datum/reagent/consumable/fat/reaction_turf(turf/simulated/T, reac_volume)
 	if (!istype(T)) return
 	if(reac_volume >= 1)
 		T.MakeSlippery(1)
 
-/datum/reagent/fat/concentrated/reaction_turf(turf/simulated/T, reac_volume)
+/datum/reagent/consumable/fat/concentrated/reaction_turf(turf/simulated/T, reac_volume)
 	if (!istype(T)) return
 	if(reac_volume >= 1)
 		T.MakeSlippery(2)
