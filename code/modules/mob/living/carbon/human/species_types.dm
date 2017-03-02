@@ -192,10 +192,12 @@
 			if(A.lighting_use_dynamic)	light_amount = T.get_lumcount() * 10
 			else						light_amount =  10
 		if(light_amount > 7) //if there's enough light, start dying
-			H.take_overall_damage(1,1)
 			if(!light_message)
 				light_message = 1
-				H << "<span class='warning'>The light burns you!</span>"
+				H << "<span class='warning'>The light is too strong here! Find shelter!</span>"
+			H.take_overall_damage(1,1)
+			H << "<span class='userdanger'>The light burns you!</span>"
+			H << 'sound/weapons/sear.ogg'
 		else
 			if(light_message)
 				light_message = 0

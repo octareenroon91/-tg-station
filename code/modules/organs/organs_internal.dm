@@ -172,7 +172,7 @@
 	hardpoint = "kidneys"
 	icon_state = "kidneys"
 	base_icon_state = "kidneys"
-	desc = "I couldn't think of a witty pun here."
+	desc = "Worth a lot of cash in the Black Market. And who needs two kidneys anyway?"
 	diseasetype = /datum/disease/kidney_failure
 
 
@@ -181,7 +181,7 @@
 	name = "lungs"
 	hardpoint = "lungs"
 	base_icon_state = "lungs"
-	desc = "I couldn't think of a witty pun here."
+	desc = "A pair of air canisters from a biological origin. There's a strange tank transfer valve attached to them."
 	diseasetype = /datum/disease/emphysema	//Smoker's lung
 	curedbyremoval = 1
 

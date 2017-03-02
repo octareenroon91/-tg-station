@@ -24,6 +24,9 @@
 	environment_smash = 0
 	ventcrawler = 2
 	mob_size = MOB_SIZE_SMALL
+	infected = 1
+	infected_bite = 1
+	infections = list(/datum/disease/magnitis,/datum/disease/fake_gbs,/datum/disease/emphysema)
 
 
 	//Space bats need no air to fly in.

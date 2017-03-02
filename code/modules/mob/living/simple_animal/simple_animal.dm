@@ -65,9 +65,20 @@
 	//simple_animal access
 	var/obj/item/weapon/card/id/access_card = null	//innate access uses an internal ID card
 
+	//Pests and Infections
+
+	var/infected = 0 // if the animal is a "pest" and can make the victims sick passively (tipycally, airborn virus)
+	var/infected_bite = 0 //if the attacks of the animal can infect victims
+	var/infection_chance = 40 //chance to contract a virus when attacked by the pest
+	var/passive_infection_chance = 20  //passive chance of contracting a virus just by being around the animal
+	var/infections = list(/datum/disease/cold,/datum/disease/anxiety,/datum/disease/pierrot_throat) //infections the animal can spread. Can be overwritten
+	var/infection_ticker
+	var/infection_ticker_max = 50 // how many ticks until it tries to passively infect someone
+
 
 /mob/living/simple_animal/New()
 	..()
+	infection_ticker = rand(0,infection_ticker_max) //prevents pests from all triggering the spread code at the same time. Only real use would be for a large ammount of map-placed mobs, since the other technically already randomize this depending on when they were created.
 	verbs -= /mob/verb/observe
 	if(!real_name)
 		real_name = name
@@ -88,6 +99,16 @@
 
 /mob/living/simple_animal/Life()
 	if(..()) //alive
+
+		if(infected)
+			infection_ticker ++
+			if(infection_ticker > infection_ticker_max)
+				infection_ticker = 0
+				for(var/mob/M in oview(7, src))
+					if(prob(passive_infection_chance))
+						var/datum/disease/D = pick(infections)
+						M.ContractDisease(new D)
+
 		if(!ckey && !key && !client)
 			handle_automated_movement()
 			handle_automated_action()
