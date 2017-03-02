@@ -247,3 +247,14 @@
 			/obj/item/weapon/reagent_containers/food/snacks/bun = 1
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/burger/meatseek_big
+	
+/datum/table_recipe/roburger
+	name = "roburger"
+	reqs = list(/datum/reagent/fuel = 50,
+				/obj/item/device/mmi,
+				/obj/item/weapon/reagent_containers/food/snacks/bun = 1,
+				/obj/item/robot_parts/head,
+				/obj/item/organ/internal/brain = 1,
+	)			
+	parts = list(/obj/item/weapon/reagent_containers/food/snacks/burger/roburger)
+	time = 150
