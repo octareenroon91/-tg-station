@@ -593,6 +593,7 @@
 		reagents.add_reagent("nutriment", 1 + round((potency / 50), 1))
 		reagents.add_reagent("banana", 1 + round((potency / 10), 1))
 		reagents.add_reagent("vitamin", 1 + round((potency / 25), 1))
+		reagents.add_reagent("potassium", 1 + round((potency / 25), 1))
 		bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana/suicide_act(mob/user)
