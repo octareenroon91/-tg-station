@@ -12,11 +12,18 @@
 	accept_any_item = 1
 	time = 32
 	var/obj/item/IC = null
+	var/static/list/common_tools = list("/obj/item/weapon/scalpel" ,"/obj/item/weapon/circular_saw" ,"/obj/item/weapon/surgicaldrill", \
+		"/obj/item/weapon/retractor", "/obj/item/weapon/cautery", "/obj/item/weapon/hemostat", \
+		"/obj/item/weapon/bedsheet", "/obj/item/weapon/surgical_drapes")
 
 /datum/surgery_step/handle_cavity/preop(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	var/obj/item/bodypart/chest/CH = target.get_bodypart("chest")
 	IC = CH.cavity_item
 	if(tool)
+		if(is_type_in_list(tool, common_tools))
+			var/confirmation = alert("Really insert \the [tool]?","Cavity-implant WHAT?", "Yes", "No")
+			if(confirmation != "Yes")
+				return
 		user.visible_message("[user] begins to insert [tool] into [target]'s [target_zone].", "<span class='notice'>You begin to insert [tool] into [target]'s [target_zone]...</span>")
 	else
 		user.visible_message("[user] checks for items in [target]'s [target_zone].", "<span class='notice'>You check for items in [target]'s [target_zone]...</span>")
