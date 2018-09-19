@@ -538,7 +538,7 @@
 
 /obj/item/twohanded/spear/CheckParts(list/parts_list)
 	var/obj/item/shard/tip = locate() in parts_list
-	if (istype(tip, /obj/item/shard/plasma))
+	if (istype(tip))
 		force_unwielded = tip.force + 5
 		force_wielded = force_unwielded + 8
 		throwforce = tip.throwforce + 10
