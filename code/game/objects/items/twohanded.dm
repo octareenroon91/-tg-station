@@ -539,10 +539,11 @@
 /obj/item/twohanded/spear/CheckParts(list/parts_list)
 	var/obj/item/shard/tip = locate() in parts_list
 	if (istype(tip, /obj/item/shard/plasma))
-		force_wielded = 19
-		force_unwielded = 11
-		throwforce = 21
-		icon_prefix = "spearplasma"
+		force_unwielded = tip.force + 5
+		force_wielded = force_unwielded + 8
+		throwforce = tip.throwforce + 10
+		if (istype(tip, /obj/item/shard/plasma))
+			icon_prefix = "spearplasma"
 	qdel(tip)
 	var/obj/item/twohanded/spear/S = locate() in parts_list
 	if(S)
