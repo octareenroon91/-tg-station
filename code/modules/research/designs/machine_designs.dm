@@ -521,7 +521,7 @@
 	id = "harvester"
 	build_path = /obj/item/circuitboard/machine/harvester
 	category = list("Medical Machinery")
-	departmental_flags = DEPARTMENTAL_FLAG_MEDICAL
+	departmental_flags = DEPARTMENTAL_FLAG_MEDICAL | DEPARTMENTAL_FLAG_SCIENCE
 
 /datum/design/board/deepfryer
 	name = "Machine Design (Deep Fryer)"
